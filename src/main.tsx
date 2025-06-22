@@ -8,13 +8,15 @@ import ProductsPage from './pages/customer/products/ProductsPage';
 import AuthPage from './pages/customer/AuthPage';
 import ProductsDetailPage from './pages/customer/products/ProductsDetailPage';
 import MerchantsDetailsPage from './pages/customer/merchants/MerchantsDetailsPage';
+import CustomerMainLayout from './layout/customer/CustomerMainLayout';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />
-  },
-  {
+    element: <CustomerMainLayout />,
+    children: [
+      {index: true, element: <HomePage />},
+        {
     path: "/products",
     element: <ProductsPage />,
     children: [
@@ -38,6 +40,8 @@ const router = createBrowserRouter([
     path: "/auth",
     element: <AuthPage />
   },
+    ]
+  }
 ])
 
 createRoot(document.getElementById('root')!).render(

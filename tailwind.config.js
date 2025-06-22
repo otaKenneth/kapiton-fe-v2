@@ -8,7 +8,7 @@ export default {
     extend: {
       fontFamily: {
         primary: ["Montserrat", "ui-sans-serif", "system-ui", "sans-serif"],
-        secondary: ["Montserrat", "ui-sans-serif", "system-ui", "sans-serif"],
+        secondary: ["Lexend", "ui-sans-serif", "system-ui", "sans-serif"],
         body: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"]
       },
       colors: {
