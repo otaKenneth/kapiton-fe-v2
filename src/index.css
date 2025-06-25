@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.swiper-pagination-bullet {
+  background-color: #fff !important;
+  border: 1px solid #1f1f22;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #1f1f22 !important; 
+}
+
+.top-categories-swiper .swiper-pagination {
+    margin-top: 20px !important; 
+    position: relative; /* keeps dots in flow if needed */
+}
+
+.top-categories-swiper .swiper-pagination-bullet {
+  background-color: #fff !important;
+}
+
+.top-categories-swiper .swiper-pagination-bullet-active {
+  background-color: #fff !important; 
+}
