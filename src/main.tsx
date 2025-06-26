@@ -1,51 +1,56 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import HomePage from './pages/customer/HomePage';
-import MerchantsPage from './pages/customer/merchants/MerchantsPage';
-import ProductsPage from './pages/customer/products/ProductsPage';
-import AuthPage from './pages/customer/AuthPage';
-import ProductsDetailPage from './pages/customer/products/ProductsDetailPage';
-import MerchantsDetailsPage from './pages/customer/merchants/MerchantsDetailsPage';
-import CustomerMainLayout from './layout/customer/CustomerMainLayout';
+import HomePage from "./pages/customer/HomePage";
+import MerchantsPage from "./pages/customer/merchants/MerchantsPage";
+import ProductsPage from "./pages/customer/products/ProductsPage";
+import AuthPage from "./pages/customer/AuthPage";
+import ProductsDetailPage from "./pages/customer/products/ProductsDetailPage";
+import MerchantsDetailsPage from "./pages/customer/merchants/MerchantsDetailsPage";
+import CustomerMainLayout from "./layout/customer/CustomerMainLayout";
+import ProductsCollectionPage from "./ProductCollectionPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <CustomerMainLayout />,
     children: [
-      {index: true, element: <HomePage />},
-        {
-    path: "/products",
-    element: <ProductsPage />,
-    children: [
+      { index: true, element: <HomePage /> },
       {
-        path: ":id",
-        element: <ProductsDetailPage />
-      }
-    ]
-  },
-  {
-    path: "/merchants",
-    element: <MerchantsPage />,
-    children: [
+        path: "/products",
+        element: <ProductsPage />,
+        children: [
+          {
+            path: "collections/:collectionId",
+            element: <ProductsCollectionPage />,
+          },
+          {
+            path: ":id",
+            element: <ProductsDetailPage />,
+          },
+        ],
+      },
       {
-        path: ":id",
-        element: <MerchantsDetailsPage />
-      }
-    ]
+        path: "/merchants",
+        element: <MerchantsPage />,
+        children: [
+          {
+            path: ":id",
+            element: <MerchantsDetailsPage />,
+          },
+        ],
+      },
+      {
+        path: "/auth",
+        element: <AuthPage />,
+      },
+    ],
   },
-  {
-    path: "/auth",
-    element: <AuthPage />
-  },
-    ]
-  }
-])
+]);
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
-  </StrictMode>,
-)
+  </StrictMode>
+);

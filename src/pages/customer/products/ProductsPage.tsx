@@ -1,12 +1,12 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet } from "react-router-dom";
 
 const ProductsPage = () => {
+
   return (
     <>
-      <div>ProductPage</div>
       <Outlet />
     </>
-  )
-}
+  );
+};
 
-export default ProductsPage
+export default ProductsPage;

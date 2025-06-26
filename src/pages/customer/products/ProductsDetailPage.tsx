@@ -1,7 +1,13 @@
-const ProductsDetailPage = () => {
-  return (
-    <div>ProductsDetailPage</div>
-  )
-}
+import { useParams } from "react-router-dom";
 
-export default ProductsDetailPage
+const ProductsDetailPage = () => {
+  const { id } = useParams();
+
+  return (
+    <div>
+      <p>{id}</p>
+    </div>
+  );
+};
+
+export default ProductsDetailPage;
