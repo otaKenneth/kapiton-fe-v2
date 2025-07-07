@@ -251,7 +251,7 @@ const HomePage = () => {
       {/* OUR TOP PRODUCTS */}
       <div className="w-full px-8 py-14 flex flex-col gap-y-6">
         <h1 className="font-primary text-primary font-semibold text-6xl text-center py-8">
-          OUR TOP CATEGORIES
+          OUR TOP PRODUCTS
         </h1>
         <div className="grid grid-cols-5">
           {topProducts.map((tp, i) => (

@@ -1,5 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { formatPeso } from "./lib/utils";
+import { Slider } from "./components/ui/slider";
+import { useState } from "react";
+import DoubleSlider from "./components/customer/DoubleSlider";
 
 const ProductsCollectionPage = () => {
   const { collectionId } = useParams();
@@ -99,6 +102,8 @@ const ProductsCollectionPage = () => {
     },
   ];
 
+  const [filterPriceRange, setFilterPriceRange] = useState<[number, number]>([0, 1000])
+
   if (!collectionId) {
     navigate("/");
     return;
@@ -107,7 +112,7 @@ const ProductsCollectionPage = () => {
   return (
     <div className="w-full flex flex-col gap-y-6 px-8">
       {/* title */}
-      <div className="w-full">
+      <div className="w-full pt-8">
         <h1 className="font-primary text-center font-bold text-primary py-16 text-7xl">
           {collectionId.toUpperCase()}
         </h1>
@@ -143,16 +148,23 @@ const ProductsCollectionPage = () => {
             <div className="font-body">
                 <h1 className="font-bold">PRICE</h1>
                 {/* should be dynamic with the highest price in collection */}
-                <p className="text-sm">{formatPeso(0)} - {formatPeso(1000)}</p>
+                <p className="text-sm">{formatPeso(filterPriceRange[0])} - {formatPeso(filterPriceRange[1])}</p>
             </div>
+            <DoubleSlider
+              min={0}
+              max={1000}
+              value={filterPriceRange}
+              onChange={setFilterPriceRange}
+            />
             <div className="w-full flex justify-center mt-4">
                 <button className="bg-primary text-white font-secondary rounded-2xl px-8 py-1 font-bold">
                     APPLY FILTERS
                 </button>
             </div>
         </div>
+
         {/* products */}
-        <div className="md:w-4/5 md:grid md:grid-cols-4 gap-y-6">
+        <div className="md:w-4/5 md:grid md:grid-cols-4 gap-y-6 pb-8">
           {collectionProducts.map((tp, i) => (
             <div key={i} className="flex flex-col px-8 mb-4">
               <div className="h-[14rem] w-[14rem] bg-white rounded-md">
