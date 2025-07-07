@@ -35,9 +35,6 @@ export default function DoubleSlider({
           aria-label="Maximum value"
         />
       </Slider.Root>
-      <div className="mt-2 text-sm text-gray-700">
-        Range: {value[0]} - {value[1]}
-      </div>
     </div>
   )
 }
