@@ -7,7 +7,7 @@ const CustomerMainLayout = () => {
   const [cartOpen, setCartOpen] = useState(false);
 
   return (
-    <div className="bg-primaryBackground">
+    <div className="bg-primaryBackground overflow-x-hidden">
       <Header onCartClick={() => setCartOpen(true)} />
       {/* Cart Sidebar */}
       <div
@@ -33,7 +33,7 @@ const CustomerMainLayout = () => {
           onClick={() => setCartOpen(false)}
         />
       )}
-      <main className="bg-primaryBackground mt-[9rem]">
+      <main className="bg-primaryBackground mt-[5rem] md:mt-[9rem]">
         <Outlet />
       </main>
       <Footer />

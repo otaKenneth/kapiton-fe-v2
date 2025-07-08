@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { formatPeso } from "./lib/utils";
 import { Slider } from "./components/ui/slider";
 import { useState } from "react";
@@ -110,13 +110,13 @@ const ProductsCollectionPage = () => {
   }
 
   return (
-    <div className="w-full flex flex-col gap-y-6 px-8">
+    <div className="w-full flex flex-col gap-y-6 px-2 sm:px-4 md:px-8 pt-8 md:mt-0">
       {/* title */}
-      <div className="w-full pt-8">
-        <h1 className="font-primary text-center font-bold text-primary py-16 text-7xl">
+      <div className="w-full pt-4 sm:pt-8">
+        <h1 className="font-primary text-center font-bold text-primary py-8 sm:py-12 md:py-16 text-3xl sm:text-5xl md:text-7xl break-words">
           {collectionId.toUpperCase()}
         </h1>
-        <div className="w-full flex justify-between items-end font-body">
+        <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-end font-body gap-y-2">
           <p className="text-primaryContrast/50">46 PRODUCTS</p>
           <div>
             <p className="text-sm text-primaryContrast/50">Sort By:</p>
@@ -141,9 +141,9 @@ const ProductsCollectionPage = () => {
         </div>
       </div>
       <div className="w-full h-[2px] bg-primary"></div>
-      <div className="flex mt-4">
+      <div className="flex flex-col md:flex-row mt-4 gap-y-8 md:gap-y-0">
         {/* filters */}
-        <div className="md:w-1/5">
+        <div className="w-full md:w-1/5 mb-8 md:mb-0 px-2 md:px-0">
             {/* price filter */}
             <div className="font-body">
                 <h1 className="font-bold">PRICE</h1>
@@ -164,14 +164,14 @@ const ProductsCollectionPage = () => {
         </div>
 
         {/* products */}
-        <div className="md:w-4/5 md:grid md:grid-cols-4 gap-y-6 pb-8">
+        <div className="w-full md:w-4/5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-2 gap-y-6 pb-8">
           {collectionProducts.map((tp, i) => (
-            <div key={i} className="flex flex-col px-8 mb-4">
-              <div className="h-[14rem] w-[14rem] bg-white rounded-md">
-                <img className="object-cover" />
+            <Link to={`/products/${tp.name}`} key={i} className="flex flex-col px-2 sm:px-4 md:px-6 mb-4">
+              <div className="h-48 sm:h-56 md:h-[14rem] w-full bg-white rounded-md flex items-center justify-center">
+                <img className="object-cover w-full h-full rounded-md" />
               </div>
               <h2
-                className="mt-4 font-secondary line-clamp-2 text-lg font-semibold text-left leading-[1.3rem]"
+                className="mt-4 font-secondary line-clamp-2 text-base sm:text-lg font-semibold text-left leading-[1.3rem]"
                 style={{ minHeight: "3rem" }}
               >
                 {tp.name}
@@ -196,9 +196,9 @@ const ProductsCollectionPage = () => {
                     <div className="h-7 w-7 rounded-md bg-white"></div>
                     <p>{tp.shopName}</p>
                 </span>
-                <h1 className="text-sm opacity-80">{tp.reviews ? `${tp.reviews} Stars` : 'No Reviews'}</h1>
+                <h1 className="text-xs sm:text-sm opacity-80">{tp.reviews ? `${tp.reviews} Stars` : 'No Reviews'}</h1>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -1,7 +1,7 @@
 const AuthPage = () => {
   return (
-    <div className="bg-primaryBackground px-6 w-full">
-      <h1 className="font-primary text-center font-bold text-primary py-16 text-6xl">
+    <div className="bg-primaryBackground px-6 w-full pt-8 md:pt-0">
+      <h1 className="font-primary text-center font-bold text-primary py-8 sm:py-12 md:py-16 text-3xl sm:text-5xl md:text-6xl">
         LOGIN
       </h1>
 
