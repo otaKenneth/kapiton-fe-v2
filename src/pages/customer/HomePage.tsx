@@ -5,9 +5,10 @@ import "swiper/css"; // Core Swiper styles
 import "swiper/css/navigation"; // Optional module styles
 import "swiper/css/pagination";
 import React, { useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, TriangleAlert } from "lucide-react";
 import { Link } from "react-router-dom";
 import { formatPeso } from "../../lib/utils";
+import { useQuery } from "@tanstack/react-query";
 
 const HomePage = () => {
   const prevRef = useRef(null);
@@ -78,78 +79,107 @@ const HomePage = () => {
   ];
 
   // fetch recently added
-  let recentlyAddedProducts = [
-    {
-      image: "",
-      name: "ASH | Multipurpose Upcycled Denim Bags",
-      price: 769,
-      discountedPrice: null,
-      reviews: null
+
+  const {
+    data: recentlyAddedProducts,
+    isLoading: recentlyAddedProductsIsLoading,
+    error: recentlyAddedProductsError,
+  } = useQuery({
+    queryKey: ["recentlyAddedProducts"],
+    queryFn: async (): Promise<
+      {
+        image: string;
+        name: string;
+        price: number;
+        discountedPrice: number | null;
+        reviews: number | null;
+      }[]
+    > => {
+      // ACTUAL IMPLEMENTATION
+      // const res = await fetch('localhost:8080/backend/endpoint');
+      // return res.json();
+
+      // SIMULATION ONLY
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const recentlyAddedProducts = [
+            {
+              image: "",
+              name: "ASH | Multipurpose Upcycled Denim Bags",
+              price: 769,
+              discountedPrice: null,
+              reviews: null,
+            },
+            {
+              image: "",
+              name: "Daphne Doll Shoes in Coconut",
+              price: 1290,
+              discountedPrice: null,
+              reviews: null,
+            },
+            {
+              image: "",
+              name: "Kapiton Polo",
+              price: 699,
+              discountedPrice: 349.5,
+              reviews: 4.5,
+            },
+            {
+              image: "",
+              name: "Daphne Doll Shoes in Tiramisu",
+              price: 1290,
+              discountedPrice: null,
+              reviews: 3,
+            },
+            {
+              image: "",
+              name: "Holiday Cheer by SPARK",
+              price: 549,
+              discountedPrice: null,
+              reviews: null,
+            },
+            {
+              image: "",
+              name: "ASH | Multipurpose Upcycled Denim Bags",
+              price: 769,
+              discountedPrice: null,
+              reviews: null,
+            },
+            {
+              image: "",
+              name: "Daphne Doll Shoes in Coconut",
+              price: 1290,
+              discountedPrice: null,
+              reviews: null,
+            },
+            {
+              image: "",
+              name: "Kapiton Polo",
+              price: 699,
+              discountedPrice: 349.5,
+              reviews: null,
+            },
+            {
+              image: "",
+              name: "Daphne Doll Shoes in Tiramisu",
+              price: 1290,
+              discountedPrice: null,
+              reviews: null,
+            },
+            {
+              image: "",
+              name: "Holiday Cheer by SPARK",
+              price: 549,
+              discountedPrice: null,
+              reviews: null,
+            },
+          ];
+
+          resolve(recentlyAddedProducts);
+        }, 5000); // 1 second delay
+      });
     },
-    {
-      image: "",
-      name: "Daphne Doll Shoes in Coconut",
-      price: 1290,
-      discountedPrice: null,
-      reviews: null
-    },
-    {
-      image: "",
-      name: "Kapiton Polo",
-      price: 699,
-      discountedPrice: 349.5,
-      reviews: 4.5,
-    },
-    {
-      image: "",
-      name: "Daphne Doll Shoes in Tiramisu",
-      price: 1290,
-      discountedPrice: null,
-      reviews: 3,
-    },
-    {
-      image: "",
-      name: "Holiday Cheer by SPARK",
-      price: 549,
-      discountedPrice: null,
-      reviews: null
-    },
-    {
-      image: "",
-      name: "ASH | Multipurpose Upcycled Denim Bags",
-      price: 769,
-      discountedPrice: null,
-      reviews: null
-    },
-    {
-      image: "",
-      name: "Daphne Doll Shoes in Coconut",
-      price: 1290,
-      discountedPrice: null,
-      reviews: null
-    },
-    {
-      image: "",
-      name: "Kapiton Polo",
-      price: 699,
-      discountedPrice: 349.5,
-      reviews: null
-    },
-    {
-      image: "",
-      name: "Daphne Doll Shoes in Tiramisu",
-      price: 1290,
-      discountedPrice: null,
-      reviews: null
-    },
-    {
-      image: "",
-      name: "Holiday Cheer by SPARK",
-      price: 549,
-      discountedPrice: null,
-      reviews: null
-    },
-  ];
+  });
 
   return (
     <div className="w-full">
@@ -236,7 +266,7 @@ const HomePage = () => {
               swiper.params.navigation.nextEl = nextRef.current;
               swiper.navigation.init();
               swiper.navigation.update();
-              window.addEventListener('resize', () => swiper.update());
+              window.addEventListener("resize", () => swiper.update());
             }}
           >
             {topCategories.map((tc, i) => (
@@ -279,10 +309,14 @@ const HomePage = () => {
                 {formatPeso(tp.discountedPrice ? tp.discountedPrice : tp.price)}
               </h1>
               {tp.discountedPrice && (
-                <p className="line-through italic text-xs md:text-base">{formatPeso(tp.price)}</p>
+                <p className="line-through italic text-xs md:text-base">
+                  {formatPeso(tp.price)}
+                </p>
               )}
               <Link
-              to={`/products/${tp.name}`} className="mt-2 border-2 border-primaryContrast rounded-full flex justify-center items-center font-primary px-4 py-2 font-semibold hover:bg-primaryContrast hover:text-white transition-colors text-xs md:text-base">
+                to={`/products/${tp.name}`}
+                className="mt-2 border-2 border-primaryContrast rounded-full flex justify-center items-center font-primary px-4 py-2 font-semibold hover:bg-primaryContrast hover:text-white transition-colors text-xs md:text-base"
+              >
                 Order Now
               </Link>
             </div>
@@ -296,9 +330,19 @@ const HomePage = () => {
           RECENTLY ADDED
         </h1>
         <div className="h-[2px] md:h-[3px] w-full bg-primary"></div>
+        {recentlyAddedProductsIsLoading && (
+          <p className="font-body">Loading recently added products...</p>
+        )}
+        {recentlyAddedProductsError && (
+          <span className="text-red-400 font-body flex gap-x-2"><TriangleAlert />Error loading recently added products</span>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 gap-y-4">
-          {recentlyAddedProducts.map((tp, i) => (
-            <Link to={`/products/${tp.name}`} key={`${tp.name}-${i}`} className="flex flex-col px-2 sm:px-4 md:px-8 mb-4">
+          {recentlyAddedProducts && recentlyAddedProducts.map((tp, i) => (
+            <Link
+              to={`/products/${tp.name}`}
+              key={`${tp.name}-${i}`}
+              className="flex flex-col px-2 sm:px-4 md:px-8 mb-4"
+            >
               <div className="sm:h-[12rem] md:h-[14rem] h-[10rem] w-full sm:w-[12rem] md:w-[14rem] bg-white rounded-md mx-auto">
                 <img className="object-cover w-full h-full rounded-md" />
               </div>
@@ -321,7 +365,9 @@ const HomePage = () => {
                     </p>
                   )}
                 </div>
-                <h1 className="text-xs md:text-sm opacity-80">{tp.reviews ? `${tp.reviews} Stars` : 'No Reviews'}</h1>
+                <h1 className="text-xs md:text-sm opacity-80">
+                  {tp.reviews ? `${tp.reviews} Stars` : "No Reviews"}
+                </h1>
               </div>
             </Link>
           ))}
@@ -331,13 +377,30 @@ const HomePage = () => {
       {/* CTA */}
       <div className="h-[28rem] w-full bg-primary py-10 px-8">
         <div className="w-1/2 py-6 flex flex-col gap-y-2">
-          <h1 className="text-6xl font-bold font-primary text-white">Become a merchant</h1>
-          <p className="text-xl mt-4 font-semibold font-secondary">Join us in this exciting journey</p>
-          <p className="text-sm font-body">Whether you're a student entrepreneur ready to showcase your creations or a local brand looking for a stage to shine, Kapiton invites you to join us in this exciting journey of innovation and community. Explore, connect, and be part of a movement that believes in the power of student-led entrepreneurship.</p>
-          <p className="text-sm font-body mt-2">Kapiton – Where Creativity Meets Commerce, and Every Student is an Entrepreneurial Star!</p>
+          <h1 className="text-6xl font-bold font-primary text-white">
+            Become a merchant
+          </h1>
+          <p className="text-xl mt-4 font-semibold font-secondary">
+            Join us in this exciting journey
+          </p>
+          <p className="text-sm font-body">
+            Whether you're a student entrepreneur ready to showcase your
+            creations or a local brand looking for a stage to shine, Kapiton
+            invites you to join us in this exciting journey of innovation and
+            community. Explore, connect, and be part of a movement that believes
+            in the power of student-led entrepreneurship.
+          </p>
+          <p className="text-sm font-body mt-2">
+            Kapiton – Where Creativity Meets Commerce, and Every Student is an
+            Entrepreneurial Star!
+          </p>
 
-          <a href="/" className="px-4 font-primary font-semibold mt-6 py-2 rounded-full w-fit border-2 border-primaryContrast">LEARN MORE</a>
-
+          <a
+            href="/"
+            className="px-4 font-primary font-semibold mt-6 py-2 rounded-full w-fit border-2 border-primaryContrast"
+          >
+            LEARN MORE
+          </a>
         </div>
       </div>
     </div>
