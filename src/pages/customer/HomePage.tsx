@@ -78,8 +78,7 @@ const HomePage = () => {
     },
   ];
 
-  // fetch recently added
-
+  // fetch recently added with react query
   const {
     data: recentlyAddedProducts,
     isLoading: recentlyAddedProductsIsLoading,
