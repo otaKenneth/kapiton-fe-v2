@@ -46,7 +46,7 @@ const Header = ({ onCartClick }: { onCartClick?: () => void }) => {
   }, [showMobileMenu]);
 
   return (
-    <header className={`w-full transition-transform duration-300 z-50 ${showHeader ? 'translate-y-0' : '-translate-y-full'} fixed top-0 left-0`}> 
+    <header className={`w-full transition-transform duration-300 shadow-xl z-50 ${showHeader ? 'translate-y-0' : '-translate-y-full'} fixed top-0 left-0`}> 
       {/* Top banner - hidden on mobile */}
       <div className="w-full justify-center py-1 bg-white z-[99] hidden sm:flex">
         <h1 className="font-body text-sm font-semibold text-gray-600">🛒 KAPITON IS IN EARLY DEVELOPMENT</h1>
