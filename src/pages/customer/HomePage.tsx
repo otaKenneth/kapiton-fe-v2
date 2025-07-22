@@ -79,7 +79,7 @@ const HomePage = () => {
   if (isLoading) {
     return (
       <div className="w-full text-center py-20">
-        <p className="font-body text-xl">Loading home page content...</p>
+        <p className="font-body text-xl">Loading...</p>
       </div>
     );
   }

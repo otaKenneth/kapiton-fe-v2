@@ -1,209 +1,160 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { formatPeso } from "./lib/utils";
-import { Slider } from "./components/ui/slider";
-import { useState } from "react";
-import DoubleSlider from "./components/customer/DoubleSlider";
+import { Link, useMatch, Outlet } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query'; // Import useQuery
+import { TriangleAlert } from 'lucide-react'; // For error icon
 
-const ProductsCollectionPage = () => {
-  const { collectionId } = useParams();
-  const navigate = useNavigate();
+// Define interfaces to match your backend JSON response structure
+interface VendorBusinessDetails {
+  shop_name: string;
+  shop_mobile: string | null;
+  shop_email: string | null;
+  shop_address: string | null;
+  shop_city: string | null;
+  shop_state: string | null;
+  shop_country: string | null;
+  shop_pincode: string | null;
+  shop_website: string | null;
+  license_image: string | null;
+  business_proof_image: string | null;
+}
 
-  // query based on collection id
-  const collectionProducts = [
-    {
-      image: "",
-      name: "ASH | Multipurpose Upcycled Denim Bags",
-      price: 769,
-      discountedPrice: null,
-      reviews: null,
-      shopName: "Unbound",
-      shopImage: ""
-    },
-    {
-      image: "",
-      name: "Daphne Doll Shoes in Coconut",
-      price: 1290,
-      discountedPrice: null,
-      reviews: null,
-      shopName: "Unbound",
-      shopImage: ""
-    },
-    {
-      image: "",
-      name: "Kapiton Polo",
-      price: 699,
-      discountedPrice: 349.5,
-      reviews: 4.5,
-      shopName: "Unbound",
-      shopImage: ""
-    },
-    {
-      image: "",
-      name: "Daphne Doll Shoes in Tiramisu",
-      price: 1290,
-      discountedPrice: null,
-      reviews: 3,
-      shopName: "Unbound",
-      shopImage: ""
-    },
-    {
-      image: "",
-      name: "Holiday Cheer by SPARK",
-      price: 549,
-      discountedPrice: null,
-      reviews: null,
-      shopName: "Unbound",
-      shopImage: ""
-    },
-    {
-      image: "",
-      name: "ASH | Multipurpose Upcycled Denim Bags",
-      price: 769,
-      discountedPrice: null,
-      reviews: null,
-      shopName: "Unbound",
-      shopImage: ""
-    },
-    {
-      image: "",
-      name: "Daphne Doll Shoes in Coconut",
-      price: 1290,
-      discountedPrice: null,
-      reviews: null,
-      shopName: "Unbound",
-      shopImage: ""
-    },
-    {
-      image: "",
-      name: "Kapiton Polo",
-      price: 699,
-      discountedPrice: 349.5,
-      reviews: null,
-      shopName: "Unbound",
-      shopImage: ""
-    },
-    {
-      image: "",
-      name: "Daphne Doll Shoes in Tiramisu",
-      price: 1290,
-      discountedPrice: null,
-      reviews: null,
-      shopName: "Unbound",
-      shopImage: ""
-    },
-    {
-      image: "",
-      name: "Holiday Cheer by SPARK",
-      price: 549,
-      discountedPrice: null,
-      reviews: null,
-      shopName: "Unbound",
-      shopImage: ""
-    },
-  ];
+interface VendorData {
+  id: number;
+  name: string; // This is the owner's name
+  email: string;
+  mobile: string;
+  wdyfu: string;
+  status: number;
+  confirm: string;
+  business_details: VendorBusinessDetails | null;
+  total_products_sold: number;
+  profile_image: string | null; // This is the photo
+  // 'reviews' is not in your backend response, so it will be handled as null/undefined
+}
 
-  const [filterPriceRange, setFilterPriceRange] = useState<[number, number]>([0, 1000])
+interface VendorApiResponse {
+  success: boolean;
+  message: string;
+  data: VendorData[]; // Array of VendorData objects
+  meta: {
+    currentPage: number;
+    perPage: number;
+    total: number;
+    hasMore: boolean;
+    nextPage: number | null;
+  };
+}
 
-  if (!collectionId) {
-    navigate("/");
-    return;
+const MerchantsPage = () => {
+  const isIndex = useMatch('/merchants');
+
+  // Use useQuery to fetch the list of vendors
+  const {
+    data: vendorsData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<VendorApiResponse, Error>({
+    queryKey: ['merchantsList'], // Unique key for this query
+    queryFn: async () => {
+      // **IMPORTANT:** Ensure this URL matches your Laravel backend's API endpoint
+      // Assuming your API is at http://localhost:9000/api/v2/vendors
+      const response = await fetch('http://localhost:9000/api/v2/vendors');
+
+      if (!response.ok) {
+        // Attempt to parse error message from backend if available
+        const errorBody = await response.json().catch(() => ({ message: 'Unknown network error' }));
+        throw new Error(errorBody.message || `HTTP error! status: ${response.status}`);
+      }
+
+      const jsonResponse = await response.json();
+
+      if (!jsonResponse.success) {
+        // If backend explicitly indicates failure with success: false
+        throw new Error(jsonResponse.message || 'Failed to fetch vendors data from API');
+      }
+
+      return jsonResponse; // Return the entire response, including data and meta
+    },
+    // Optional: Add cache settings
+    staleTime: 5 * 60 * 1000, // Data considered fresh for 5 minutes
+    cacheTime: 10 * 60 * 1000, // Data remains in cache for 10 minutes
+  });
+
+  // Handle loading state
+  if (isLoading) {
+    return (
+      <div className="w-full text-center py-20 bg-primaryBackground">
+        <p className="font-body text-xl">Loading merchants...</p>
+      </div>
+    );
   }
 
+  // Handle error state
+  if (isError) {
+    return (
+      <div className="w-full text-center py-20 text-red-600 bg-primaryBackground">
+        <span className="font-body text-xl flex items-center justify-center gap-x-2">
+          <TriangleAlert /> Error loading merchants: {error?.message || 'Unknown error.'}
+        </span>
+        <p className="font-body text-sm mt-2">
+          Please ensure your Laravel backend is running and accessible at `http://localhost:9000/api/v2/vendors`.
+        </p>
+        <p className="font-body text-sm mt-1">
+          Also check your browser console for CORS errors.
+        </p>
+      </div>
+    );
+  }
+
+  // Extract the actual vendor data array
+  const merchants = vendorsData?.data || [];
+
   return (
-    <div className="w-full flex flex-col gap-y-6 px-2 sm:px-4 md:px-8 pt-8 md:mt-0">
-      {/* title */}
-      <div className="w-full pt-4 sm:pt-8">
-        <h1 className="font-primary text-center font-bold text-primary py-8 sm:py-12 md:py-16 text-3xl sm:text-5xl md:text-7xl break-words">
-          {collectionId.toUpperCase()}
-        </h1>
-        <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-end font-body gap-y-2">
-          <p className="text-primaryContrast/50">46 PRODUCTS</p>
-          <div>
-            <p className="text-sm text-primaryContrast/50">Sort By:</p>
-            <select
-              name="sort"
-              id="sort"
-              className="px-4 rounded-md py-1 text-sm "
-            >
-              <option value="date_new_to_old">Date, new to old</option>
-              <option value="date_old_to_new">Date, old to new</option>
-              <option value="price_low_to_high">Price, low to high</option>
-              <option value="price_high_to_low">Price, high to low</option>
-              <option value="alphabetically_a_to_z">
-                Alphabetically, A to Z
-              </option>
-              <option value="alphabetically_z_to_a">
-                Alphabetically, Z to A
-              </option>
-              <option value="best_selling">Best Selling</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div className="w-full h-[2px] bg-primary"></div>
-      <div className="flex flex-col md:flex-row mt-4 gap-y-8 md:gap-y-0">
-        {/* filters */}
-        <div className="w-full md:w-1/5 mb-8 md:mb-0 px-2 md:px-0">
-            {/* price filter */}
-            <div className="font-body">
-                <h1 className="font-bold">PRICE</h1>
-                {/* should be dynamic with the highest price in collection */}
-                <p className="text-sm">{formatPeso(filterPriceRange[0])} - {formatPeso(filterPriceRange[1])}</p>
-            </div>
-            <DoubleSlider
-              min={0}
-              max={1000}
-              value={filterPriceRange}
-              onChange={setFilterPriceRange}
-            />
-            <div className="w-full flex justify-center mt-4">
-                <button className="bg-primary text-white font-secondary rounded-2xl px-8 py-1 font-bold">
-                    APPLY FILTERS
-                </button>
-            </div>
-        </div>
-
-        {/* products */}
-        <div className="w-full md:w-4/5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-2 gap-y-6 pb-8">
-          {collectionProducts.map((tp, i) => (
-            <Link to={`/products/${tp.name}`} key={i} className="flex flex-col px-2 sm:px-4 md:px-6 mb-4">
-              <div className="h-48 sm:h-56 md:h-[14rem] w-full bg-white rounded-md flex items-center justify-center">
-                <img className="object-cover w-full h-full rounded-md" />
-              </div>
-              <h2
-                className="mt-4 font-secondary line-clamp-2 text-base sm:text-lg font-semibold text-left leading-[1.3rem]"
-                style={{ minHeight: "3rem" }}
-              >
-                {tp.name}
-              </h2>
-
-              <div className="mt-2 flex items-center gap-x-2">
-                <h1 className="font-primary">
-                  {formatPeso(
-                    tp.discountedPrice ? tp.discountedPrice : tp.price
-                  )}
-                </h1>
-                {tp.discountedPrice && (
-                  <p className="line-through italic text-xs">
-                    {formatPeso(tp.price)}
+    <div className='bg-primaryBackground px-2 pt-8 md:pt-0 sm:px-4 md:px-6'>
+      <h1 className="font-primary text-center font-bold text-primary py-8 sm:py-12 md:py-16 text-3xl sm:text-5xl md:text-6xl">
+        MERCHANTS
+      </h1>
+      {isIndex && (
+        <div className='px-6 md:px-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 sm:gap-x-4 gap-y-6 py-4 sm:py-8'>
+          {merchants.length > 0 ? (
+            merchants.map((m) => (
+              <div key={m.id} className='bg-white py-6 sm:py-8 rounded-2xl flex flex-col items-center min-h-[22rem] sm:min-h-[26rem] md:min-h-[30rem] px-2 sm:px-4 shadow-md hover:shadow-lg transition-shadow duration-300'>
+                <div className='h-24 w-24 sm:h-32 sm:w-32 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center'>
+                  <img
+                    src={m.profile_image || "https://placehold.co/128x128/e0e0e0/ffffff?text=No+Photo"} // Use profile_image from backend
+                    alt={m.business_details?.shop_name || m.name}
+                    className="object-cover w-full h-full"
+                    onError={(e) => { e.currentTarget.src = "https://placehold.co/128x128/e0e0e0/ffffff?text=No+Photo"; }} // Fallback on error
+                  />
+                </div>
+                <div className='mt-4 text-center px-2 sm:px-4'>
+                  <h1 className='font-primary font-bold text-base sm:text-lg line-clamp-1'>{m.business_details?.shop_name || m.name}</h1>
+                  <p className='font-body text-xs sm:text-sm mt-2 line-clamp-1'>{m.name}</p> {/* Owner name */}
+                  <p className='font-body text-xs sm:text-sm line-clamp-2'>
+                    {m.business_details?.shop_address || 'Address not specified'}
+                    {m.business_details?.shop_city ? `, ${m.business_details.shop_city}` : ''}
+                    {m.business_details?.shop_state ? `, ${m.business_details.shop_state}` : ''}
                   </p>
-                )}
+                </div>
+                <div className='mt-6 flex flex-col items-center gap-y-4'>
+                  {/* Reviews are not provided by backend, so keep as static text or remove */}
+                  <p className='font-body font-semibold text-xs sm:text-sm'>
+                    {m.reviews ? `${m.reviews} Stars` : 'No Reviews'}
+                  </p>
+                  <Link to={`/merchants/${m.id}`} className='bg-primaryContrast text-white rounded-full px-6 sm:px-8 py-2 text-xs sm:text-base hover:bg-primary hover:scale-105 transition-all duration-300'>
+                    View Store
+                  </Link>
+                </div>
               </div>
-
-              <div className="flex justify-between w-full items-center mt-4">
-                <span className="flex gap-x-2 items-center text-sm">
-                    {/* shop image */}
-                    <div className="h-7 w-7 rounded-md bg-white"></div>
-                    <p>{tp.shopName}</p>
-                </span>
-                <h1 className="text-xs sm:text-sm opacity-80">{tp.reviews ? `${tp.reviews} Stars` : 'No Reviews'}</h1>
-              </div>
-            </Link>
-          ))}
+            ))
+          ) : (
+            <div className="col-span-full text-center text-gray-500 py-10">No merchants available at the moment.</div>
+          )}
         </div>
-      </div>
+      )}
+      <Outlet />
     </div>
   );
 };
 
-export default ProductsCollectionPage;
+export default MerchantsPage;
