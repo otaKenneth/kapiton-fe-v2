@@ -11,7 +11,6 @@ import { formatPeso } from "../../lib/utils";
 import { useQuery } from "@tanstack/react-query";
 
 // Define an interface for the expected data structure from the backend
-// This helps with type safety in TypeScript, if you're using it.
 interface HomePageData {
   sliderBanners: {
     image: string | null;
@@ -41,7 +40,6 @@ interface HomePageData {
 }
 
 const HomePage = () => {
-  // We need distinct refs for each Swiper if they operate independently
   const mainSliderPrevRef = useRef(null);
   const mainSliderNextRef = useRef(null);
   const categoriesSliderPrevRef = useRef(null);
@@ -57,28 +55,18 @@ const HomePage = () => {
   } = useQuery<HomePageData, Error>({
     queryKey: ["homePageData"],
     queryFn: async () => {
-      // **THIS IS THE CRUCIAL PART:** Fetching from your Laravel backend endpoint
-      // Ensure 'http://localhost:9000' matches where your Laravel app is running
-      // and '/api/index' matches your Laravel route definition.
       const response = await fetch("http://localhost:9000/api/index"); // <--- This line fetches the data
 
       if (!response.ok) {
-        // Handle HTTP errors (e.g., 404, 500)
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const jsonResponse = await response.json();
-
-      // Your backend returns { success: true, message: ..., data: { ... } }
-      // So, we check 'success' and return 'data' if successful.
       if (!jsonResponse.success) {
         throw new Error(jsonResponse.message || "Failed to fetch data from API");
       }
 
-      return jsonResponse.data; // This 'data' key contains sliderBanners, topCategories, etc.
+      return jsonResponse.data;
     },
-    // Optional: Add cache settings if desired
-    staleTime: 5 * 60 * 1000, // Data considered fresh for 5 minutes
-    cacheTime: 10 * 60 * 1000, // Data remains in cache for 10 minutes
   });
 
   // Destructure the fetched data once it's available.
@@ -88,7 +76,6 @@ const HomePage = () => {
   const topProducts = homePageData?.topProducts || [];
   const recentlyAddedProducts = homePageData?.recentlyAddedProducts || [];
 
-  // --- Loading and Error States for the entire page ---
   if (isLoading) {
     return (
       <div className="w-full text-center py-20">
@@ -178,7 +165,6 @@ const HomePage = () => {
           OUR TOP CATEGORIES
         </h1>
         <div className="w-full max-w-full flex-1 relative min-w-0">
-          {/* custom Navigation Buttons for categories slider */}
           <button
             ref={categoriesSliderPrevRef}
             className="absolute left-2 top-[40%] z-10 -translate-y-1/2 bg-white text-primaryContrast rounded-full p-3 shadow-lg"
@@ -246,7 +232,7 @@ const HomePage = () => {
           {topProducts.length > 0 ? (
             topProducts.map((tp) => (
               <Link
-                to={`/products/${tp.id}`} // Using product ID for robust linking
+                to={`/products/${tp.id}`}
                 key={`top-product-${tp.id}`}
                 className="flex flex-col items-center px-2 sm:px-4 md:px-8 text-center group"
               >
@@ -290,8 +276,6 @@ const HomePage = () => {
           RECENTLY ADDED
         </h1>
         <div className="h-[2px] md:h-[3px] w-full bg-primary"></div>
-        {/* These loading/error states are now handled by the main 'isLoading' and 'isError' */}
-        {/* but kept here as an example if you had separate queries for each section */}
         {isLoading && (
             <p className="font-body">Loading recently added products...</p>
         )}
@@ -369,7 +353,7 @@ const HomePage = () => {
           </p>
 
           <Link
-            to="/register-vendor" // Changed href to Link for React Router
+            to="/register-vendor" 
             className="px-4 font-primary font-semibold mt-6 py-2 rounded-full w-fit border-2 border-primaryContrast"
           >
             LEARN MORE
