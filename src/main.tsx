@@ -9,7 +9,7 @@ import AuthPage from "./pages/customer/AuthPage";
 import ProductsDetailPage from "./pages/customer/products/ProductsDetailPage";
 import MerchantsDetailsPage from "./pages/customer/merchants/MerchantsDetailsPage";
 import CustomerMainLayout from "./layout/customer/CustomerMainLayout";
-import ProductsCollectionPage from "./ProductCollectionPage";
+import ProductsCollectionPage from "./pages/customer/products/ProductCollectionPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
