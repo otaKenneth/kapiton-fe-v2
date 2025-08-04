@@ -25,9 +25,10 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@pages": ["./src/pages/*"],
+      "@lib": ["./src/lib/*"],
+      "@components": ["./src/components/*"],
+      "@layout": ["./src/layout/*"]
     }
   },
   "include": ["src", "src/swiper-css.d.ts"]
