@@ -10,7 +10,8 @@
       "@pages": ["./src/pages/*"],
       "@lib": ["./src/lib/*"],
       "@components": ["./src/components/*"],
-      "@layout": ["./src/layout/*"]
+      "@layout": ["./src/layout/*"],
+      "@api": ["./src/api/*"]
     }
   }
 }
