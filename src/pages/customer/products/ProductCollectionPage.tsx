@@ -1,17 +1,17 @@
 import { useQuery } from '@tanstack/react-query'; // Import useQuery
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { productsQuery } from "@api";
-import { formatPeso } from "@lib/utils";
 import ProductFilters from './ProductFilters';
+import ProductCard from './ProductCard';
 
 const ProductsCollectionPage = () => {
-  const { collectionId } = useParams();
+  const { collectType, collectionId } = useParams();
   const navigate = useNavigate();
 
-  const { data, isLoading, isFetching, error } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ['products', collectionId],
-    queryFn: () => productsQuery("collection",collectionId),
+    queryFn: () => productsQuery(collectType, collectionId),
     initialData: {data: []},
     select: (data) => data.data
   });
@@ -67,38 +67,7 @@ const ProductsCollectionPage = () => {
               <p className="font-body text-xl">No Results Found...</p>
             </div>
           ) : data?.map((tp, i) => (
-            <Link to={`/products/${tp.product_name}`} key={i} className="flex flex-col px-2 sm:px-4 md:px-6 mb-4">
-              <div className="h-48 sm:h-56 md:h-[14rem] w-full bg-white rounded-md flex items-center justify-center">
-                <img className="object-cover w-full h-full rounded-md" />
-              </div>
-              <h2
-                className="mt-4 font-secondary line-clamp-2 text-base sm:text-lg font-semibold text-left leading-[1.3rem]"
-                style={{ minHeight: "3rem" }}
-              >
-                {tp.product_name}
-              </h2>
-
-              <div className="mt-2 flex items-center gap-x-2">
-                <h1 className="font-primary">
-                  {formatPeso(
-                    tp.discountedPrice ? tp.discountedPrice : tp.product_price
-                  )}
-                </h1>
-                {tp.discountedPrice && (
-                  <p className="line-through italic text-xs">
-                    {formatPeso(tp.product_price)}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex justify-between w-full items-center mt-4">
-                <span className="flex gap-x-2 items-center text-sm">
-                    <div className="h-7 w-7 rounded-md bg-white"></div>
-                    <p>{tp.vendor.vendorbusinessdetails.shop_name}</p>
-                </span>
-                <h1 className="text-xs sm:text-sm opacity-80">{tp.reviews ? `${tp.reviews} Stars` : 'No Reviews'}</h1>
-              </div>
-            </Link>
+            <ProductCard key={i} product={tp} />
           ))}
         </div>
       </div>
