@@ -4,7 +4,7 @@ import { formatPeso } from "@lib/utils";
 const ProductCard = ({product, ...otherProps}) => {
   return (
     <>
-      <Link to={`/products/${product.product_name}`} className="flex flex-col px-2 sm:px-4 md:px-6 mb-4">
+      <Link to={`/products/${product.id}`} className="flex flex-col px-2 sm:px-4 md:px-6 mb-4">
         <div className="h-48 sm:h-56 md:h-[14rem] w-full bg-white rounded-md flex items-center justify-center">
           <img className="object-cover w-full h-full rounded-md" />
         </div>
