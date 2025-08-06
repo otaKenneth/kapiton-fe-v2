@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import "@lib/elementor.css"
+import "@styles/elementor.css"
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "@pages/customer/HomePage";
 import MerchantsPage from "@pages/customer/merchants/MerchantsPage";

@@ -29,18 +29,18 @@ const ProductsDetailPage = () => {
           }}
         >
           <div>
-            <div className="d-flex flex-row flex-wrap mb-2">
+            <div className="d-flex flex-row flex-wrap mb-2 list-of-tags">
               <span></span>
             </div>
-            <h1 className="text-6xl">KAPITON POLO</h1>
+            <h1 className="product-title text-6xl">{data.product_name}</h1>
           </div>
           <div className="flex flex-row justify-start align-center gap-3">
-            <div className="flex flex-row justify-start align-center gap3">
+            <div className="flex flex-row justify-start align-center gap-3 vendor">
               <div>
                 <img src="" alt="" style={{ width: "30px"}} />
               </div>
               <div>
-                <span>Kapiton</span>
+                <span className="shop_name">{data.vendor.vendorbusinessdetails.shop_name}</span>
               </div>
             </div>
             <div>No Reviews</div>

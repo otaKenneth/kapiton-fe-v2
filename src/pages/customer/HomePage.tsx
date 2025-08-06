@@ -97,7 +97,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full elementor-kit-6">
       {/* SLIDER BANNERS */}
       <div className="w-full relative">
         {/* custom Navigation Buttons for main slider */}

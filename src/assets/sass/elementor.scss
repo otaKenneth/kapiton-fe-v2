@@ -1,6 +1,6 @@
 $color_1: #B9B9B9;
-$color_2: var( --e-global-color-accent );
-$color_3: var( --e-global-color-secondary );
+$color_2: #5F7A61;
+$color_3: #1F1F22;
 $color_4: #FF0000;
 $color_5: #9B9B9B;
 $color_6: #ffffff;
@@ -17,20 +17,20 @@ $color_16: white;
 $color_17: black;
 $font-family_1: "Louis George Cafe", Sans-serif;
 $font-family_2: "Lexend", Sans-serif;
-$background-color_1: var( --e-global-color-46e7d24 );
+$background-color_1: #F1F5F0;
 $background-color_2: #FFFFFF;
 $background-color_3: #ffffff;
-$background-color_4: var( --e-global-color-secondary );
+$background-color_4: #1F1F22;
 $background-color_5: #F1F5F0;
-$background-color_6: var( --e-global-color-accent );
+$background-color_6: #5F7A61;
 $background-color_7: #87CBB900;
-$background-color_8: var( --e-global-color-primary );
+$background-color_8: #87CBB9;
 $background-color_9: #F5F5F5;
 $background-color_10: #FFFFFF00;
 $background-color_11: #5F7A6100;
 $background-color_12: #87CDBF;
-$border-color_1: var( --e-global-color-primary );
-$border-color_2: var( --e-global-color-accent );
+$border-color_1: #87CBB9;
+$border-color_2: #5F7A61;
 
 /* Start Custom Fonts CSS */
 @font-face {
@@ -38,51 +38,139 @@ $border-color_2: var( --e-global-color-accent );
 	font-style: normal;
 	font-weight: normal;
 	font-display: auto;
-	src: url(./../../fonts/Louis-George-Cafe.ttf) format('truetype');
+	src: url(./../fonts/Louis-George-Cafe.ttf) format('truetype');
 }
 @font-face {
 	font-family: 'Louis George Cafe';
 	font-style: italic;
 	font-weight: normal;
 	font-display: auto;
-	src: url(./../../fonts/Louis-George-Cafe-Italic.ttf) format('truetype');
+	src: url(./../fonts/Louis-George-Cafe-Italic.ttf) format('truetype');
 }
 @font-face {
 	font-family: 'Louis George Cafe';
 	font-style: normal;
 	font-weight: 300;
 	font-display: auto;
-	src: url(./../../fonts/Louis-George-Cafe-Light.ttf) format('truetype');
+	src: url(./../fonts/Louis-George-Cafe-Light.ttf) format('truetype');
 }
 @font-face {
 	font-family: 'Louis George Cafe';
 	font-style: italic;
 	font-weight: 300;
 	font-display: auto;
-	src: url(./../../fonts/Louis-George-Cafe-Light-Italic.ttf) format('truetype');
+	src: url(./../fonts/Louis-George-Cafe-Light-Italic.ttf) format('truetype');
 }
 @font-face {
 	font-family: 'Louis George Cafe';
 	font-style: normal;
 	font-weight: 600;
 	font-display: auto;
-	src: url(./../../fonts/Louis-George-Cafe-Bold.ttf) format('truetype');
+	src: url(./../fonts/Louis-George-Cafe-Bold.ttf) format('truetype');
 }
 @font-face {
 	font-family: 'Louis George Cafe';
 	font-style: italic;
 	font-weight: 600;
 	font-display: auto;
-	src: url(./../../fonts/Louis-George-Cafe-Bold-Italic.ttf) format('truetype');
+	src: url(./../fonts/Louis-George-Cafe-Bold-Italic.ttf) format('truetype');
 }
 @font-face {
 	font-family: 'Louis George Cafe';
 	font-style: normal;
 	font-weight: 700;
 	font-display: auto;
-	src: url(./../../fonts/Lexend-Medium.ttf) format('truetype');
+	src: url(./../fonts/Lexend-Medium.ttf) format('truetype');
 }
 /* End Custom Fonts CSS */
+
+$font-family_1: "Louis George Cafe", Sans-serif;
+$font-family_2: "Lexend", Sans-serif;
+$background-color_1: #87CDBF;
+$background-color_2: #FFBC7D;
+
+/* Start Custom Fonts CSS */
+@font-face {
+	font-family: 'Louis George Cafe';
+	font-style: normal;
+	font-weight: normal;
+	font-display: auto;
+	src: url(./../fonts/Louis-George-Cafe.ttf) format('truetype');
+}
+.elementor-kit-6 {
+	font-family: $font-family_1;
+	font-weight: 400;
+	h1 {
+		font-family: $font-family_2;
+		text-transform: uppercase;
+	}
+	h2 {
+		font-family: $font-family_2;
+		text-transform: uppercase;
+	}
+	h3 {
+		font-family: $font-family_2;
+		text-transform: uppercase;
+	}
+	button {
+		background-color: $background-color_1;
+	}
+	input[type="button"] {
+		background-color: $background-color_1;
+	}
+	input[type="submit"] {
+		background-color: $background-color_1;
+	}
+	.elementor-button {
+		background-color: $background-color_1;
+	}
+	e-page-transition {
+		background-color: $background-color_2;
+	}
+}
+.elementor-section.elementor-section-boxed {
+	>.elementor-container {
+		max-width: 1440px;
+	}
+}
+.e-con {
+	--container-max-width: 1440px;
+}
+.elementor-widget {
+	&:not(:last-child) {
+		margin-block-end: 20px;
+	}
+}
+.elementor-element {
+	--widgets-spacing: 20px 20px;
+}
+h1.entry-title {
+	display: var(--page-title-display);
+}
+.site-header {
+	padding-inline-end: 0px;
+	padding-inline-start: 0px;
+}
+@media (max-width:1024px) {
+	.elementor-section.elementor-section-boxed {
+		>.elementor-container {
+			max-width: 1024px;
+		}
+	}
+	.e-con {
+		--container-max-width: 1024px;
+	}
+}
+@media (max-width:767px) {
+	.elementor-section.elementor-section-boxed {
+		>.elementor-container {
+			max-width: 767px;
+		}
+	}
+	.e-con {
+		--container-max-width: 767px;
+	}
+}
 
 
 .list-of-tags {
@@ -100,9 +188,60 @@ $border-color_2: var( --e-global-color-accent );
   padding: 2px 11px;
 }
 
+body {
+	font-family: $font-family_1;
+}
+
+.product-title {
+	color: $color_2;
+	font-family: $font-family_2;
+	font-size: 56px;
+	font-weight: 600;
+}
+
+.vendor {
+	.shop_name {
+		color: $color_3;
+		font-family: $font-family_1;
+		font-size: 14px;
+		font-weight: 400;
+		font-style: italic;
+	}
+}
+
+.elementor-element-14f2792 {
+	--e-n-carousel-swiper-slides-to-display: 1;
+	--e-n-carousel-slide-height: auto;
+	--e-n-carousel-slide-container-height: 100%;
+	--e-n-carousel-arrow-prev-left-align: 0%;
+	--e-n-carousel-arrow-prev-translate-x: 0px;
+	--e-n-carousel-arrow-prev-left-position: 0px;
+	--e-n-carousel-arrow-prev-top-align: 50%;
+	--e-n-carousel-arrow-prev-translate-y: -50%;
+	--e-n-carousel-arrow-prev-top-position: 0px;
+	--e-n-carousel-arrow-next-right-align: 0%;
+	--e-n-carousel-arrow-next-translate-x: 0%;
+	--e-n-carousel-arrow-next-right-position: 0px;
+	--e-n-carousel-arrow-next-top-align: 50%;
+	--e-n-carousel-arrow-next-translate-y: -50%;
+	--e-n-carousel-arrow-next-top-position: 0px;
+	--e-n-carousel-swiper-slides-gap: 10px;
+	--e-n-carousel-arrow-size: 20px;
+	--e-n-carousel-arrow-normal-color: var( --e-global-color-secondary );
+	--e-n-carousel-arrow-hover-color: var( --e-global-color-secondary );
+	--e-n-carousel-swiper-pagination-size: 6px;
+	--e-n-carousel-progressbar-normal-color: var( --e-global-color-secondary );
+	&:is(.elementor-swiper-button-prev) {
+		background-color: $background-color_2;
+		box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+		border-radius: 100px 100px 100px 100px;
+		padding: 8px 8px 8px 8px;
+	}
+}
+
 /* CUSTOM CSS NINO FELICIANO*/
-.elementor-491 {
-	.elementor-element.elementor-element-51b2b2e {
+.elementor {
+	.elementor-element.elementor-element-main-container {
 		--display: flex;
 		--flex-direction: row;
 		--container-widget-width: initial;
@@ -143,7 +282,6 @@ $border-color_2: var( --e-global-color-accent );
 	.elementor-element.elementor-element-e8c1cfd {
 		.elementor-heading-title {
 			color: $color_1;
-			font-family: $font-family_1;
 			font-size: 16px;
 			font-weight: 600;
 		}
@@ -378,35 +516,6 @@ $border-color_2: var( --e-global-color-accent );
 			width: 100%;
 			width: 100%;
 			width: 100%;
-		}
-	}
-	.elementor-element.elementor-element-14f2792 {
-		--e-n-carousel-swiper-slides-to-display: 1;
-		--e-n-carousel-slide-height: auto;
-		--e-n-carousel-slide-container-height: 100%;
-		--e-n-carousel-arrow-prev-left-align: 0%;
-		--e-n-carousel-arrow-prev-translate-x: 0px;
-		--e-n-carousel-arrow-prev-left-position: 0px;
-		--e-n-carousel-arrow-prev-top-align: 50%;
-		--e-n-carousel-arrow-prev-translate-y: -50%;
-		--e-n-carousel-arrow-prev-top-position: 0px;
-		--e-n-carousel-arrow-next-right-align: 0%;
-		--e-n-carousel-arrow-next-translate-x: 0%;
-		--e-n-carousel-arrow-next-right-position: 0px;
-		--e-n-carousel-arrow-next-top-align: 50%;
-		--e-n-carousel-arrow-next-translate-y: -50%;
-		--e-n-carousel-arrow-next-top-position: 0px;
-		--e-n-carousel-swiper-slides-gap: 10px;
-		--e-n-carousel-arrow-size: 20px;
-		--e-n-carousel-arrow-normal-color: var( --e-global-color-secondary );
-		--e-n-carousel-arrow-hover-color: var( --e-global-color-secondary );
-		--e-n-carousel-swiper-pagination-size: 6px;
-		--e-n-carousel-progressbar-normal-color: var( --e-global-color-secondary );
-		&:is(.elementor-swiper-button-prev) {
-			background-color: $background-color_2;
-			box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
-			border-radius: 100px 100px 100px 100px;
-			padding: 8px 8px 8px 8px;
 		}
 	}
 	.elementor-element.elementor-element-a402a83 {
@@ -2400,7 +2509,7 @@ $border-color_2: var( --e-global-color-accent );
 	.chat_vendor_window.active {
 		display: flex;
 	}
-	.elementor-element-51b2b2e {
+	.elementor-element-main-container {
 		.swiper-slide {
 			>.elementor-element {
 				width: 100%;
@@ -2425,7 +2534,7 @@ $border-color_2: var( --e-global-color-accent );
 	padding: 8px 8px 8px 8px;
 }
 body.rtl {
-	.elementor-491 {
+	.elementor {
 		.elementor-element.elementor-element-0b98135 {
 			.elementor-labels-inline {
 				.elementor-field-group {
@@ -2448,7 +2557,7 @@ body.rtl {
 }
 body {
 	&:not(.rtl) {
-		.elementor-491 {
+		.elementor {
 			.elementor-element.elementor-element-0b98135 {
 				.elementor-labels-inline {
 					.elementor-field-group {
@@ -2469,7 +2578,7 @@ body {
 			}
 		}
 	}
-	.elementor-491 {
+	.elementor {
 		.elementor-element.elementor-element-0b98135 {
 			.elementor-labels-above {
 				.elementor-field-group {
@@ -2507,7 +2616,7 @@ body {
 		padding: 2px 11px;
 	}
 }
-.elementor-491.reviews_images {
+.elementor.reviews_images {
 	a {
 		img {
 			width: 100%;
@@ -2690,7 +2799,7 @@ body {
 	}
 }
 @media (min-width:768px) {
-	.elementor-491 {
+	.elementor {
 		.elementor-element.elementor-element-37b0796 {
 			--width: 100%;
 		}
@@ -2781,7 +2890,7 @@ body {
 	}
 }
 @media (max-width:1024px) and (min-width:768px) {
-	.elementor-491 {
+	.elementor {
 		.elementor-element.elementor-element-f97c986 {
 			--width: 100%;
 		}
@@ -2800,7 +2909,7 @@ body {
 	}
 }
 @media (max-width:1024px) {
-	.elementor-491 {
+	.elementor {
 		.elementor-element.elementor-element-14f2792 {
 			--e-n-carousel-swiper-slides-to-display: 1;
 		}
@@ -2856,8 +2965,8 @@ body {
 	}
 }
 @media (max-width:767px) {
-	.elementor-491 {
-		.elementor-element.elementor-element-51b2b2e {
+	.elementor {
+		.elementor-element.elementor-element-main-container {
 			--padding-block-start: 30px;
 			--padding-block-end: 10px;
 			--padding-inline-start: 10px;
@@ -3040,14 +3149,14 @@ body {
 	}
 }
 @media (max-width: 1024px) {
-	.elementor-491 {
+	.elementor {
 		.popup_review_container {
 			height: calc(100vh - 117px);
 		}
 	}
 }
 @media (max-width: 767px) {
-	.elementor-491 {
+	.elementor {
 		.popup_review_container {
 			height: calc(100vh - 115px);
 			img {
@@ -3111,7 +3220,7 @@ body {
 	}
 }
 @media (min-width: 768px) {
-	.elementor-491 {
+	.elementor {
 		.elementor-element-c9a5113 {
 			.e-con-inner {
 				column-gap: 10px;
