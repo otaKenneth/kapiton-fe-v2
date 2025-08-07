@@ -1,20 +1,75 @@
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { productDetails } from "@api";
+import Select from "@components/ui/Select";
+import QuantityInput from "@components/ui/Quantity";
+import { formatPeso } from "@lib/utils";
 
 const ProductsDetailPage = () => {
   const { id } = useParams();
+  const [quantity, setQuantity] = useState(1);
+  const [maxQuantity, setMaxQuantity] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState("");
+  const [attributePrice, setAttributePrice] = useState(0);
 
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isFetching, isSuccess, isError, error } = useQuery({
     queryKey: ['productDetails', id],
     queryFn: () => productDetails(id),
     refetchOnWindowFocus: false,
     retry: 1,
-    select: (data) => data.data,
-  });
+    select: (data) => data.data
+  })
+    
+  function getVariantOptions (k, attributes) {
+    var options = ["color", "size"];
+    return attributes.map((attr) => ({
+      price: attr.price,
+      stock: attr.stock,
+      value: attr.id,
+      label: attr[options[k]],
+    }));
+  }
+
+  function computeDiscountPrice(price:number, discount:number, category_discount:number) {
+    var new_price = price
+    if (discount > 0) {
+      new_price = price - (price * discount / 100);
+    }
+    if (category_discount > 0) {
+      new_price = new_price - (new_price * category_discount / 100);
+    }
+    return formatPeso(new_price);
+  }
+
+  function handleVariantSelect(e) {
+    var selectedValue = e.target.value;
+    var selectedStock = e.target.options[e.target.selectedIndex].getAttribute("data-stock");
+    var selectedPrice = e.target.options[e.target.selectedIndex].getAttribute("data-price");
+    console.log("Selected Variant:", selectedValue, "Stock:", selectedStock, "Price:", selectedPrice);
+    setAttributePrice(selectedPrice);
+    setMaxQuantity(selectedStock);
+    setSelectedVariant(selectedValue);
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      const firstVariant = data.variants[0];
+      if (firstVariant && firstVariant.attributes.length > 0) {
+        const firstAttribute = firstVariant.attributes[0];
+        setSelectedVariant(firstAttribute.id);
+        setMaxQuantity(firstAttribute.stock);
+        setAttributePrice(firstAttribute.price);
+      }
+    }
+  }, [isSuccess, data]);
 
   if (isFetching) {
-    return <div className="p-4 sm:p-6 md:p-8">Loading...</div>;
+    return <div className="p-4 sm:p-6 md:p-8 text-green-900 text-4xl w-full text-center">Loading...</div>;
+  }
+
+  if (isError) {
+    return <div className="p-4 sm:p-6 md:p-8 text-green-900 text-6xl w-full text-center">Product not Found</div>;
   }
 
   return (
@@ -46,19 +101,29 @@ const ProductsDetailPage = () => {
             <div>No Reviews</div>
           </div>
           <div className="flex flex-row justify-start align-center gap-3">
-            <span className="text-xl">P 999</span>
+            <span className="text-xl">{computeDiscountPrice(attributePrice, data.product_discount, data.category.category_discount)}</span>
           </div>
           <div className="description"></div>
           <div className="flex flex-col justify-start align-center gap-4">
             <div className="flex flex-row align-center gap-5">
-              <div>
-                <span>Variation1</span>
-              </div>
-              <div>
-                <span>Variation2</span>
-              </div>
+              {data?.variants.map((variant, key) => (
+                <Select key={key} label={variant.variant_name} 
+                  options={getVariantOptions(key, variant.attributes)} 
+                  value={selectedVariant} 
+                  onChange={handleVariantSelect} 
+                />
+              ))}
             </div>
-            <div><span>Quantity</span><span>Stock</span></div>
+            {data?.variants.length > 0 && (
+              <div>
+                <QuantityInput 
+                  label={"Stock"} 
+                  value={quantity} 
+                  onChange={setQuantity} 
+                  max={maxQuantity} 
+                />
+              </div>
+            )}
             <div><span>Button</span></div>
           </div>
         </div>
