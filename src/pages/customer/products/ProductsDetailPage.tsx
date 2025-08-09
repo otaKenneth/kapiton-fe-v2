@@ -10,7 +10,7 @@ const ProductsDetailPage = () => {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [maxQuantity, setMaxQuantity] = useState(1);
-  const [selectedVariant, setSelectedVariant] = useState("");
+  const [selectedVariant, setSelectedVariant] = useState({});
   const [attributePrice, setAttributePrice] = useState(0);
 
   const { data, isFetching, isSuccess, isError, error } = useQuery({
@@ -20,14 +20,11 @@ const ProductsDetailPage = () => {
     retry: 1,
     select: (data) => data.data
   })
-    
-  function getVariantOptions (k, attributes) {
-    var options = ["color", "size"];
+
+  function getVariantOptions (k:number, attributes: any[]) {
     return attributes.map((attr) => ({
-      price: attr.price,
-      stock: attr.stock,
-      value: attr.id,
-      label: attr[options[k]],
+      value: attr,
+      label: attr,
     }));
   }
 
@@ -42,25 +39,34 @@ const ProductsDetailPage = () => {
     return formatPeso(new_price);
   }
 
-  function handleVariantSelect(e) {
+  function handleVariantSelect(e: React.ChangeEvent<HTMLSelectElement>) {
     var selectedValue = e.target.value;
-    var selectedStock = e.target.options[e.target.selectedIndex].getAttribute("data-stock");
-    var selectedPrice = e.target.options[e.target.selectedIndex].getAttribute("data-price");
-    console.log("Selected Variant:", selectedValue, "Stock:", selectedStock, "Price:", selectedPrice);
-    setAttributePrice(selectedPrice);
-    setMaxQuantity(selectedStock);
-    setSelectedVariant(selectedValue);
+    var selectedLabel = e.target.options[e.target.selectedIndex].getAttribute("data-label");
+
+    setSelectedVariant(prev => ({ ...prev, [selectedLabel]: selectedValue }));
+    const selectedOptions = selectedVariant;
+    selectedOptions[selectedLabel] = selectedValue;
+    
+    let opt_keys = Object.keys(selectedOptions);
+    let selected_attribute = data.attributes.find(d => d.color == selectedOptions[opt_keys[0]] && d.size == selectedOptions[opt_keys[1]])
+    if (selected_attribute) {
+      setAttributePrice(selected_attribute.price);
+      setMaxQuantity(selected_attribute.stock);
+    } else {
+      setAttributePrice(0);
+      setMaxQuantity(0);
+    }
+
   }
 
   useEffect(() => {
     if (isSuccess) {
-      const firstVariant = data.variants[0];
-      if (firstVariant && firstVariant.attributes.length > 0) {
-        const firstAttribute = firstVariant.attributes[0];
-        setSelectedVariant(firstAttribute.id);
-        setMaxQuantity(firstAttribute.stock);
-        setAttributePrice(firstAttribute.price);
-      }
+      data.variants.forEach(variant => {
+        setSelectedVariant(prev => ({ ...prev, [variant.variant_name]: variant.attributes[0] }));
+        let selected_attribute = data.attributes[0]
+        setAttributePrice(selected_attribute.price);
+        setMaxQuantity(selected_attribute.stock);
+      })
     }
   }, [isSuccess, data]);
 
@@ -73,7 +79,7 @@ const ProductsDetailPage = () => {
   }
 
   return (
-    <div className="w-full flex flex-col gap-y-6 px-2 sm:px-4 md:px-8 pt-8 md:mt-0">
+    <div className="elementor w-full flex flex-col gap-y-6 px-2 sm:px-4 md:px-8 pt-8 md:mt-0">
       <div className="flex gap-5">
         <div style={{ height: "700px", width: "700px" }}>
           <img src="" alt="" style={{ height: "100%", width: "100%" }} />
@@ -100,21 +106,22 @@ const ProductsDetailPage = () => {
             </div>
             <div>No Reviews</div>
           </div>
-          <div className="flex flex-row justify-start align-center gap-3">
+          <div className="flex flex-row justify-start align-center gap-3 elementor-element elementor-element-32fc723">
             <span className="text-xl">{computeDiscountPrice(attributePrice, data.product_discount, data.category.category_discount)}</span>
+            <span className="elementor-heading-title text-xl">{formatPeso(attributePrice)}</span>
           </div>
-          <div className="description"></div>
+          <div className="description">{data.description}</div>
           <div className="flex flex-col justify-start align-center gap-4">
             <div className="flex flex-row align-center gap-5">
               {data?.variants.map((variant, key) => (
                 <Select key={key} label={variant.variant_name} 
                   options={getVariantOptions(key, variant.attributes)} 
-                  value={selectedVariant} 
+                  value={selectedVariant[variant.variant_name]} 
                   onChange={handleVariantSelect} 
                 />
               ))}
             </div>
-            {data?.variants.length > 0 && (
+            {data?.variants.length > 0 ? (
               <div>
                 <QuantityInput 
                   label={"Stock"} 
@@ -123,8 +130,21 @@ const ProductsDetailPage = () => {
                   max={maxQuantity} 
                 />
               </div>
+            ) : (
+              <div style={{ 
+                height: "39px",
+                display: "flex",
+                alignItems: "center",
+                marginRight: "10px"
+              }}>
+                No Stock
+              </div>
             )}
-            <div><span>Button</span></div>
+            <div className="elementor-kit-6 pdp-min-with-btn elementor-element element-products-detail-page">
+              <button type="submit" className="elementor-button px-4 py-3">
+                <span className="text-sm">Add to Cart</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

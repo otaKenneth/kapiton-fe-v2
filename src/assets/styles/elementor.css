@@ -585,7 +585,7 @@ body {
   --padding-inline-start: 0px;
   --padding-inline-end: 0px;
 }
-.elementor .elementor-element.elementor-element-0b98135 {
+.elementor .elementor-element.element-products-detail-page {
   --e-form-steps-indicators-spacing: 20px;
   --e-form-steps-indicator-padding: 30px;
   --e-form-steps-indicator-inactive-secondary-color: #ffffff;
@@ -594,63 +594,63 @@ body {
   --e-form-steps-divider-width: 1px;
   --e-form-steps-divider-gap: 10px;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-field-group {
+.elementor .elementor-element.element-products-detail-page .elementor-field-group {
   padding-right: 5px;
   padding-left: 5px;
   margin-bottom: 10px;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-field-group:not(.elementor-field-type-upload) .elementor-field:not(.elementor-select-wrapper) {
+.elementor .elementor-element.element-products-detail-page .elementor-field-group:not(.elementor-field-type-upload) .elementor-field:not(.elementor-select-wrapper) {
   background-color: #ffffff;
   border-radius: 100px 100px 100px 100px;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-field-group .elementor-select-wrapper select {
+.elementor .elementor-element.element-products-detail-page .elementor-field-group .elementor-select-wrapper select {
   background-color: #ffffff;
   border-radius: 100px 100px 100px 100px;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-form-fields-wrapper {
+.elementor .elementor-element.element-products-detail-page .elementor-form-fields-wrapper {
   margin-left: -5px;
   margin-right: -5px;
   margin-bottom: -10px;
   margin-top: 20px;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-field-group.recaptcha_v3-bottomleft {
+.elementor .elementor-element.element-products-detail-page .elementor-field-group.recaptcha_v3-bottomleft {
   margin-bottom: 0;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-field-group.recaptcha_v3-bottomright {
+.elementor .elementor-element.element-products-detail-page .elementor-field-group.recaptcha_v3-bottomright {
   margin-bottom: 0;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-field-type-html {
+.elementor .elementor-element.element-products-detail-page .elementor-field-type-html {
   padding-bottom: 0px;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-button {
+.elementor .elementor-element.element-products-detail-page .elementor-button {
   font-family: "Lexend", Sans-serif;
   font-weight: 500;
   border-radius: 100px 100px 100px 100px;
 }
-.elementor .elementor-element.elementor-element-0b98135 .e-form__buttons__wrapper__button-next {
+.elementor .elementor-element.element-products-detail-page .e-form__buttons__wrapper__button-next {
   background-color: #1F1F22;
   color: #ffffff;
 }
-.elementor .elementor-element.elementor-element-0b98135 .e-form__buttons__wrapper__button-next:hover {
+.elementor .elementor-element.element-products-detail-page .e-form__buttons__wrapper__button-next:hover {
   color: #ffffff;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-button[type=submit] {
+.elementor .elementor-element.element-products-detail-page .elementor-button[type=submit] {
   background-color: #1F1F22;
   color: #ffffff;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-button[type=submit] svg * {
+.elementor .elementor-element.element-products-detail-page .elementor-button[type=submit] svg * {
   fill: #ffffff;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-button[type=submit]:hover {
+.elementor .elementor-element.element-products-detail-page .elementor-button[type=submit]:hover {
   color: #ffffff;
 }
-.elementor .elementor-element.elementor-element-0b98135 .elementor-button[type=submit]:hover svg * {
+.elementor .elementor-element.element-products-detail-page .elementor-button[type=submit]:hover svg * {
   fill: #ffffff;
 }
-.elementor .elementor-element.elementor-element-0b98135 .e-form__buttons__wrapper__button-previous {
+.elementor .elementor-element.element-products-detail-page .e-form__buttons__wrapper__button-previous {
   color: #ffffff;
 }
-.elementor .elementor-element.elementor-element-0b98135 .e-form__buttons__wrapper__button-previous:hover {
+.elementor .elementor-element.element-products-detail-page .e-form__buttons__wrapper__button-previous:hover {
   color: #ffffff;
 }
 .elementor .elementor-element.elementor-element-b451558 .elementor-heading-title {
@@ -2336,29 +2336,6 @@ body {
   padding: 8px 8px 8px 8px;
 }
 
-body.rtl .elementor .elementor-element.elementor-element-0b98135 .elementor-labels-inline .elementor-field-group > label {
-  padding-left: 0px;
-}
-body.rtl .elementor .elementor-element.elementor-element-1dc2f32 .elementor-labels-inline .elementor-field-group > label {
-  padding-left: 0px;
-}
-
-body:not(.rtl) .elementor .elementor-element.elementor-element-0b98135 .elementor-labels-inline .elementor-field-group > label {
-  padding-right: 0px;
-}
-body:not(.rtl) .elementor .elementor-element.elementor-element-1dc2f32 .elementor-labels-inline .elementor-field-group > label {
-  padding-right: 0px;
-}
-body .elementor .elementor-element.elementor-element-0b98135 .elementor-labels-above .elementor-field-group > label {
-  padding-bottom: 0px;
-}
-body .elementor .elementor-element.elementor-element-1dc2f32 .elementor-labels-above .elementor-field-group > label {
-  padding-bottom: 0px;
-}
-body:root {
-  --page-title-display: none;
-}
-
 .list-of-tags {
   display: flex;
   gap: 6px;
@@ -2914,3 +2891,5 @@ body:root {
     font-size: 16px !important;
   }
 }
+
+/*# sourceMappingURL=elementor.css.map */
