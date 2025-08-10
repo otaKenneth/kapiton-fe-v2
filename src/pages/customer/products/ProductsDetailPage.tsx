@@ -121,14 +121,19 @@ const ProductsDetailPage = () => {
                 />
               ))}
             </div>
-            {data?.variants.length > 0 ? (
-              <div>
-                <QuantityInput 
-                  label={"Stock"} 
-                  value={quantity} 
-                  onChange={setQuantity} 
-                  max={maxQuantity} 
-                />
+            <div>
+              <QuantityInput 
+                label={"Stock"} 
+                value={quantity} 
+                onChange={setQuantity} 
+                max={maxQuantity} 
+              />
+            </div>
+            {maxQuantity > 0 ? (
+              <div className="elementor-kit-6 pdp-min-with-btn elementor-element element-products-detail-page">
+                <button type="submit" className="elementor-button px-4 py-3">
+                  <span className="text-sm">Add to Cart</span>
+                </button>
               </div>
             ) : (
               <div style={{ 
@@ -140,11 +145,6 @@ const ProductsDetailPage = () => {
                 No Stock
               </div>
             )}
-            <div className="elementor-kit-6 pdp-min-with-btn elementor-element element-products-detail-page">
-              <button type="submit" className="elementor-button px-4 py-3">
-                <span className="text-sm">Add to Cart</span>
-              </button>
-            </div>
           </div>
         </div>
       </div>
