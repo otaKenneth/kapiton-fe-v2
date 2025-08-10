@@ -1,14 +1,27 @@
+import { productReviews } from '@api'
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
+
 const ProductReviews = () => {
+  const { id } = useParams();
+  const { data, isFetching, isSuccess, isError, error } = useQuery({
+    queryKey: ['productReviews', id],
+    queryFn: () => productReviews(id),
+    refetchOnWindowFocus: false,
+    retry: 1,
+    select: (data) => data.data
+  });
+
   return (
     <div className="w-full flex flex-col px-2 sm:px-4 md:px-8 pt-8 product-reviews m-auto">
       <div className="w-auto flex flex-col flex-wrap justify-center align-items-center">
-        <div className="product-total-review-container flex flex-shrink-1 flex-wrap gap-4">
+        <div className="product-total-review-container flex flex-shrink-1 flex-wrap gap-4 bg-white">
           <h2 className="w-full text-3xl font-bold text-center">Product Reviews</h2>
           <div className="box-1 w-50 widget-rating">
-            <StarRating count={3} />
-            <span className="text-sm text-gray-500">3 out of 5 stars</span>
+            <StarRating count={data?.avg_star_rating} />
+            <span className="text-sm text-gray-500">{data?.avg_rating} out of 5 stars</span>
             <div className="review-count">
-              <span className="text-sm text-gray-500">100 reviews</span>
+              <span className="text-sm text-gray-500">{data?.total_reviews} reviews</span>
             </div>
           </div>
           <div className="box-2 filters">
@@ -18,6 +31,19 @@ const ProductReviews = () => {
               <option value="negative">Negative Reviews</option>
             </select>
           </div>
+        </div>
+
+        <div className="w-full flex flex-wrap justify-around mt-6 gap-y-4">
+          {data?.reviews.map((review) => (
+            <div key={review.id} className="bg-white review-card p-4 border rounded shadow-sm">
+              <div className="flex items-center gap-2">
+                <StarRating count={review.rating} />
+                <span className="text-sm text-gray-500">{`${review.user.first_name} ${review.user.last_name}`}</span>
+              </div>
+              <p className="text-gray-700 mt-2">{review.review}</p>
+              <span className="text-xs text-gray-400">{new Date(review.created_at).toLocaleDateString()}</span>
+            </div>
+          ))}
         </div>
       </div>
     {/* Add review components here */}

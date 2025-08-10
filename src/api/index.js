@@ -32,3 +32,9 @@ export async function productRelated (product_id) {
     if (!res.ok) throw new Error("Failed to fetch product related.");
     return res.json();
 }
+
+export async function productReviews (product_id) {
+    const res = await fetch(api_address + `product_reviews/${product_id}`);
+    if (!res.ok) throw new Error("Failed to fetch product reviews.");
+    return res.json();
+}
