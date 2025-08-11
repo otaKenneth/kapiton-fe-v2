@@ -105,7 +105,7 @@ const productDetail = () => {
                 <img src="" alt="" style={{ width: "30px"}} />
               </div>
               <div>
-                <span className="shop_name">{data.vendor.vendorbusinessdetails.shop_name}</span>
+                <span className="shop_name">{data.vendor?.vendorbusinessdetails.shop_name}</span>
               </div>
             </div>
             <div>No Reviews</div>
@@ -127,7 +127,7 @@ const productDetail = () => {
             </div>
             <div>
               <QuantityInput 
-                label={"Stock"} 
+                label={"Quantity"} 
                 value={quantity} 
                 onChange={setQuantity} 
                 max={maxQuantity} 

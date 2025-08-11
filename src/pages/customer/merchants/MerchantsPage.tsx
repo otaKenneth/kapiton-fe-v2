@@ -136,7 +136,7 @@ const MerchantsPage = () => {
                   <p className='font-body font-semibold text-xs sm:text-sm'>
                     {m.reviews ? `${m.reviews} Stars` : 'No Reviews'}
                   </p>
-                  <Link to={`/merchants/${m.id}`} className='bg-primaryContrast text-white rounded-full px-6 sm:px-8 py-2 text-xs sm:text-base hover:bg-primary hover:scale-105 transition-all duration-300'>
+                  <Link to={`/products/vendor/${m.id}`} className='bg-primaryContrast text-white rounded-full px-6 sm:px-8 py-2 text-xs sm:text-base hover:bg-primary hover:scale-105 transition-all duration-300'>
                     View Store
                   </Link>
                 </div>

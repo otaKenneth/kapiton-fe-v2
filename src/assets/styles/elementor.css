@@ -211,6 +211,38 @@ body {
 }
 
 /* CUSTOM CSS NINO FELICIANO*/
+.elementor .e-con .form-group {
+  margin-bottom: 20px;
+}
+.elementor .e-con .form-group .title {
+  font-family: "Louis George Cafe", Sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #5F7A61;
+}
+.elementor .e-con .form-group .title-2 {
+  font-family: "Louis George Cafe", Sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #1F1F22;
+}
+.elementor .e-con .btn {
+  padding: 10px 20px;
+  background-color: #87CDBF;
+  color: black;
+  border-radius: 0.23em;
+  font-weight: 600;
+}
+.elementor .e-con .btn.primary {
+  background-color: #87CBB9;
+  color: #5F7A61;
+  font-weight: bold;
+}
+.elementor .e-con .btn.primary:hover {
+  background-color: #5F7A61;
+  color: white;
+  transition: ease-in-out 0.3s;
+}
 .elementor .elementor-element.elementor-element-main-container {
   --display: flex;
   --flex-direction: row;

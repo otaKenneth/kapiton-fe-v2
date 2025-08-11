@@ -70,7 +70,7 @@ const Header = ({ onCartClick }: { onCartClick?: () => void }) => {
         <div className="flex font-body gap-x-2 sm:gap-x-4 text-xs sm:text-sm items-center">
           {/* Desktop auth links - hidden on mobile */}
           <div className="hidden md:flex gap-x-4">
-            <NavLink to="/">Become a Seller</NavLink>
+            <NavLink to="/become-merchant">Become a Seller</NavLink>
             <NavLink to="/auth/customer">Login/Register</NavLink>
           </div>
           
@@ -107,7 +107,7 @@ const Header = ({ onCartClick }: { onCartClick?: () => void }) => {
               <NavLink to="/merchants" className="py-2 border-b border-gray-600 last:border-b-0" onClick={() => setShowMobileMenu(false)}>
                 MERCHANTS
               </NavLink>
-              <NavLink to="/" className="py-2 border-b border-gray-600 last:border-b-0 md:hidden" onClick={() => setShowMobileMenu(false)}>
+              <NavLink to="/become-merchant" className="py-2 border-b border-gray-600 last:border-b-0 md:hidden" onClick={() => setShowMobileMenu(false)}>
                 Become a Seller
               </NavLink>
             </div>

@@ -258,6 +258,45 @@ body {
 
 /* CUSTOM CSS NINO FELICIANO*/
 .elementor {
+	.e-con {
+		.form-group {
+			margin-bottom: 20px;
+
+			.title {
+				font-family: $font-family_1;
+				font-weight: 600;
+				font-size: 16px;
+				color: $color_2;
+			}
+
+			.title-2 {
+				font-family: $font-family_1;
+				font-weight: 400;
+				font-size: 14px;
+				color: $color_3;
+			}
+		}
+
+		.btn {
+			padding: 10px 20px;
+			background-color: $background-color_1;
+			color: black;
+			border-radius: 0.23em;
+			font-weight: 600;
+
+			&.primary {
+				background-color: $background-color_8;
+				color: $color_7;
+				font-weight: bold;
+
+				&:hover {
+					background-color: $background-color_6;
+					color: white;
+					transition: ease-in-out 0.3s;
+				}
+			}
+		}
+	}
 	.elementor-element.elementor-element-main-container {
 		--display: flex;
 		--flex-direction: row;

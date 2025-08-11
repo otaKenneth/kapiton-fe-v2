@@ -8,9 +8,9 @@ import MerchantsPage from "@pages/customer/merchants/MerchantsPage";
 import ProductsPage from "@pages/customer/products/ProductsPage";
 import AuthPage from "@pages/customer/AuthPage";
 import ProductsDetailPage from "@pages/customer/products/ProductsDetailPage";
-import MerchantsDetailsPage from "@pages/customer/merchants/MerchantsDetailsPage";
 import CustomerMainLayout from "@layout/customer/CustomerMainLayout";
 import ProductsCollectionPage from "@pages/customer/products/ProductCollectionPage";
+import BecomeMerchant from "@pages/customer/merchants/BecomeMerchant";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
@@ -37,13 +37,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/merchants",
-        element: <MerchantsPage />,
-        children: [
-          {
-            path: ":id",
-            element: <MerchantsDetailsPage />,
-          },
-        ],
+        element: <MerchantsPage />
+      },
+      {
+        path: "/become-merchant",
+        element: <BecomeMerchant />
       },
       {
         path: "/auth/customer",
