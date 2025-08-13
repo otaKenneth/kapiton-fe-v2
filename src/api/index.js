@@ -38,3 +38,15 @@ export async function productReviews (product_id) {
     if (!res.ok) throw new Error("Failed to fetch product reviews.");
     return res.json();
 }
+
+export async function becomeMerchant (formData) {
+    const res = await fetch(api_address + `become_merchant`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+    });
+    if (!res.ok) throw new Error("Failed to submit become merchant form.");
+    return res.json();
+}

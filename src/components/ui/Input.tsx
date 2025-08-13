@@ -1,9 +1,11 @@
-const Input = ({ label, id, ...props }: { label: string; id: string; [key: string]: any }) => {
+const Input = ({ label, id, value, onChange, ...props }: { label: string; id: string; [key: string]: any, value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => {
   return (
     <div className="relative pt-2 border-2 border-gray-300 rounded-md focus-within:border-blue-600 overflow-hidden">
       <input
         type="text"
         id={id}
+        value={value}
+        onChange={onChange}
         className="peer px-2 h-10 w-full text-gray-900 placeholder-transparent focus:outline-none"
         placeholder="Input Field"
       />
