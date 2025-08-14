@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import Input from "@components/ui/Input";
-import Select from "@components/ui/Select";
+import { Input, Select } from "@components";
 import {becomeMerchant} from "@api";
 
 const BecomeMerchant = () => {
   const [enableSubmit, setEnableSubmit] = useState(false);
+  const [errorObj, setErrorObj] = useState<any>({
+    firstname: "",
+    lastname: "",
+    email: "",
+    mobile: "",
+    shop_name: "",
+    wdyfu: "facebook"
+  }); 
   const becomeMerchantMutation = useMutation({
     mutationFn: (formData) => becomeMerchant(formData),
     onSuccess: (resp) => {
@@ -20,7 +27,9 @@ const BecomeMerchant = () => {
       });
     },
     onError: (error) => {
-      console.error("Error submitting form:", error);
+      if (error.errors) {
+        setErrorObj(error.errors)
+      }
     }
   });
 
@@ -70,26 +79,39 @@ const BecomeMerchant = () => {
             <div className="form-group">
               <div className="title-2 text-xl">Business Owner / Representative</div>
               <div className="text-input-container space-y-3">
-                <Input label="First Name" id="firstname" value={form.firstname} onChange={(e) => setForm({ ...form, firstname: e.target.value })} />
-                <Input label="Last Name" id="lastname" value={form.lastname} onChange={(e) => setForm({ ...form, lastname: e.target.value })} />
-                <span className="error-message text-red-500 text-sm"></span>
+                <Input label="First Name" id="firstname" 
+                  value={form.firstname} onChange={(e) => setForm({ ...form, firstname: e.target.value })} 
+                  err={errorObj.firstname}
+                />
+                <Input label="Last Name" id="lastname" 
+                  value={form.lastname} onChange={(e) => setForm({ ...form, lastname: e.target.value })} 
+                  err={errorObj.lastname} />
               </div>
             </div>
             <div className="form-group">
               <div className="title-2 text-xl">Contact Details</div>
               <div className="text-input-container space-y-3">
-                <Input label="Email" id="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-                <Input label="Contact Number" id="contact_no" value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} />
-                <span className="error-message text-red-500 text-sm"></span>
+                <Input label="Email" id="email" 
+                  value={form.email} 
+                  onChange={(e) => setForm({ ...form, email: e.target.value })} 
+                  err={errorObj.email}
+                />
+                <Input label="Contact Number" id="contact_no" value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} 
+                  err={errorObj.mobile}
+                />
               </div>
             </div>
             <div className="form-group">
               <div className="title-2 text-xl">Business Name</div>
               <div className="text-input-container">
                 <div>
-                  <Input label="Business Name" id="business_name" value={form.shop_name} onChange={(e) => setForm({ ...form, shop_name: e.target.value })} />
+                  <Input label="Business Name" 
+                    id="business_name" 
+                    value={form.shop_name} 
+                    onChange={(e) => setForm({ ...form, shop_name: e.target.value })} 
+                    err={errorObj.shop_name}
+                  />
                 </div>
-                <span className="error-message text-red-500 text-sm"></span>
               </div>
             </div>
             <div className="form-group">
@@ -101,7 +123,7 @@ const BecomeMerchant = () => {
                   { value: "referral", label: "Referral" },
                   { value: "word-of-mouth", label: "Word of Mouth" },
                 ]} value={form.wdyfu} onChange={(e) => setForm({ ...form, wdyfu: e.target.value })} />
-                <span className="error-message text-red-500 text-sm"></span>
+                <span className="error-message text-red-500 text-sm">{errorObj.wdyfu}</span>
               </div>
             </div>
             <div id="recaptcha-container"></div>

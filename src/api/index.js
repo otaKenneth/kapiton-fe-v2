@@ -47,6 +47,9 @@ export async function becomeMerchant (formData) {
         },
         body: JSON.stringify(formData)
     });
-    if (!res.ok) throw new Error("Failed to submit become merchant form.");
+    if (!res.ok) {
+        const errorData = await res.json()
+        throw errorData;
+    };
     return res.json();
 }
