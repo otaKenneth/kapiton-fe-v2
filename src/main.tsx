@@ -11,6 +11,7 @@ import ProductsDetailPage from "@pages/customer/products/ProductsDetailPage";
 import CustomerMainLayout from "@layout/customer/CustomerMainLayout";
 import ProductsCollectionPage from "@pages/customer/products/ProductCollectionPage";
 import BecomeMerchant from "@pages/customer/merchants/BecomeMerchant";
+import EmailConfirmed from "@pages/customer/merchants/EmailConfirmed";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "/merchants",
         element: <MerchantsPage />
+      },
+      {
+        path: "/vendor/confirm/:code",
+        element: <EmailConfirmed />
       },
       {
         path: "/become-merchant",

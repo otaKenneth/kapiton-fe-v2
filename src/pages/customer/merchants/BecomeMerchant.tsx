@@ -11,7 +11,7 @@ const BecomeMerchant = () => {
     email: "",
     mobile: "",
     shop_name: "",
-    wdyfu: "facebook"
+    wdyfu: ""
   }); 
   const becomeMerchantMutation = useMutation({
     mutationFn: (formData) => becomeMerchant(formData),
@@ -59,6 +59,14 @@ const BecomeMerchant = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorObj({
+      firstname: "",
+      lastname: "",
+      email: "",
+      mobile: "",
+      shop_name: "",
+      wdyfu: ""
+    })
     becomeMerchantMutation.mutate(form);
   }
 

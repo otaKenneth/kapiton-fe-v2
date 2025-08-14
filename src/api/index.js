@@ -53,3 +53,17 @@ export async function becomeMerchant (formData) {
     };
     return res.json();
 }
+
+export async function vendorEmailVerification(code) {
+    const res = await fetch(api_address + `vendor/confirm/${code}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw errorData;
+    }
+    return res.json();
+}
