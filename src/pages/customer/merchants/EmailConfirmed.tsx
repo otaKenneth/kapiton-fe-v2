@@ -1,7 +1,6 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { vendorEmailVerification } from "@api"; 
-import { useEffect } from "react";
 
 const EmailConfirmed = () => {
   const {code} = useParams();
