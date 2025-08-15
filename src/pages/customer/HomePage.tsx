@@ -330,36 +330,6 @@ const HomePage = () => {
           )}
         </div>
       </div>
-
-      {/* CTA */}
-      <div className="h-[28rem] w-full bg-primary py-10 px-8">
-        <div className="w-1/2 py-6 flex flex-col gap-y-2">
-          <h1 className="text-6xl font-bold font-primary text-white">
-            Become a merchant
-          </h1>
-          <p className="text-xl mt-4 font-semibold font-secondary">
-            Join us in this exciting journey
-          </p>
-          <p className="text-sm font-body">
-            Whether you're a student entrepreneur ready to showcase your
-            creations or a local brand looking for a stage to shine, Kapiton
-            invites you to join us in this exciting journey of innovation and
-            community. Explore, connect, and be part of a movement that believes
-            in the power of student-led entrepreneurship.
-          </p>
-          <p className="text-sm font-body mt-2">
-            Kapiton – Where Creativity Meets Commerce, and Every Student is an
-            Entrepreneurial Star!
-          </p>
-
-          <Link
-            to="/register-vendor" 
-            className="px-4 font-primary font-semibold mt-6 py-2 rounded-full w-fit border-2 border-primaryContrast"
-          >
-            LEARN MORE
-          </Link>
-        </div>
-      </div>
     </div>
   );
 };
