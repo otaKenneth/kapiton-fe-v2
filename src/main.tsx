@@ -5,6 +5,7 @@ import "@styles/elementor.css"
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "@pages/customer/HomePage";
 import AuthPage from "@pages/customer/AuthPage";
+import ForgotPassword from "@pages/customer/ForgotPassword";
 import CustomerMainLayout from "@layout/customer/CustomerMainLayout";
 import {
   ProductsPage, 
@@ -52,8 +53,17 @@ const router = createBrowserRouter([
       },
       {
         path: "/auth/customer",
-        element: <AuthPage />,
-      },
+        children: [
+          {
+            path: '',
+            element: <AuthPage />,
+          },
+          {
+            path: 'forgot-password',
+            element: <ForgotPassword />
+          }
+        ]
+      }
     ],
   },
 ]);

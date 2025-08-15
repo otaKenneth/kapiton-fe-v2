@@ -55,11 +55,21 @@ export async function becomeMerchant (formData) {
 }
 
 export async function vendorEmailVerification(code) {
-    const res = await fetch(api_address + `vendor/confirm/${code}`, {
-        method: "GET",
+    const res = await fetch(api_address + `vendor/confirm/${code}`);
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw errorData;
+    }
+    return res.json();
+}
+
+export async function sendForgotPassEmail(formData) {
+    const res = await fetch(api_address + `forgot-password`, {
+        method: "POST",
         headers: {
             "Content-Type": "application/json"
-        }
+        },
+        body: JSON.stringify(formData)
     });
     if (!res.ok) {
         const errorData = await res.json();
