@@ -21,7 +21,8 @@ const AuthPage = () => {
         token: resp.data.token,
         user: resp.data.user
       })
-      console.log(resp)
+      localStorage.setItem('token', resp.data.token);
+      localStorage.setItem('user', JSON.stringify(resp.data.user));
     },
     onError: (error) => {
       setErrorObj(error)

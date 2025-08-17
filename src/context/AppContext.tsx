@@ -19,7 +19,16 @@ interface AppContextProps {
 const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [state, setState] = useState<AppState>(defaultState);
+  const getInitialState = (): AppState => {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    return {
+      token: token || null,
+      user: user ? JSON.parse(user) : null,
+    };
+  };
+
+  const [state, setState] = useState<AppState>(getInitialState());
 
   return (
     <AppContext.Provider value={{ state, setState }}>

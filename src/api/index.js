@@ -93,3 +93,18 @@ export async function customerLogin(formData) {
     }
     return res.json();
 }
+
+export async function customerLogout(token) {
+    const res = await fetch(api_address + `user/logout`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw errorData;
+    }
+    return res.json();
+}

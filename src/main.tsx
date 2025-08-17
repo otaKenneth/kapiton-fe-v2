@@ -13,12 +13,20 @@ import {
   ProductsDetailPage, 
   ProductsCollectionPage
 } from "@pages/customer/products";
-import MerchantsPage from "@pages/customer/merchants/MerchantsPage";
-import BecomeMerchant from "@pages/customer/merchants/BecomeMerchant";
-import EmailConfirmed from "@pages/customer/merchants/EmailConfirmed";
+import {
+  MerchantsPage,
+  BecomeMerchant,
+  EmailConfirmed
+} from "@pages/customer/merchants";
+import {
+  UserPage
+} from '@pages/customer/user_account';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
+
+// localStorage.removeItem('token');
+// localStorage.removeItem('user');
 
 const router = createBrowserRouter([
   {
@@ -63,6 +71,36 @@ const router = createBrowserRouter([
             path: 'forgot-password',
             element: <ForgotPassword />
           }
+        ]
+      },
+      {
+        path: '/user',
+        element: <UserPage />,
+        children: [
+          {
+            path: 'profile',
+            element: <>Profile</>
+          },
+          {
+            path: 'delivery-addresses',
+            element: <>Delivery Addresses</>
+          },
+          {
+            path: 'change-password',
+            element: <>Chage Password</>
+          },
+          {
+            path: 'orders',
+            element: <>Orders</>
+          },
+          {
+            path: 'wishlist',
+            element: <>Wishlist</>
+          },
+          {
+            path: 'chats',
+            element: <>Chats</>
+          },
         ]
       }
     ],
