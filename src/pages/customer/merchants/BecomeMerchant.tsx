@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { Input, Select } from "@components";
+import { TextField, Select } from "@components";
 import {becomeMerchant} from "@api";
 
 const BecomeMerchant = () => {
@@ -87,11 +87,11 @@ const BecomeMerchant = () => {
             <div className="form-group">
               <div className="title-2 text-xl">Business Owner / Representative</div>
               <div className="text-input-container space-y-3">
-                <Input label="First Name" id="firstname" 
+                <TextField label="First Name" id="firstname" 
                   value={form.firstname} onChange={(e) => setForm({ ...form, firstname: e.target.value })} 
                   err={errorObj.firstname}
                 />
-                <Input label="Last Name" id="lastname" 
+                <TextField label="Last Name" id="lastname" 
                   value={form.lastname} onChange={(e) => setForm({ ...form, lastname: e.target.value })} 
                   err={errorObj.lastname} />
               </div>
@@ -99,12 +99,12 @@ const BecomeMerchant = () => {
             <div className="form-group">
               <div className="title-2 text-xl">Contact Details</div>
               <div className="text-input-container space-y-3">
-                <Input label="Email" id="email" 
+                <TextField label="Email" id="email" 
                   value={form.email} 
                   onChange={(e) => setForm({ ...form, email: e.target.value })} 
                   err={errorObj.email}
                 />
-                <Input label="Contact Number" id="contact_no" value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} 
+                <TextField label="Contact Number" id="contact_no" value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} 
                   err={errorObj.mobile}
                 />
               </div>
@@ -113,7 +113,7 @@ const BecomeMerchant = () => {
               <div className="title-2 text-xl">Business Name</div>
               <div className="text-input-container">
                 <div>
-                  <Input label="Business Name" 
+                  <TextField label="Business Name" 
                     id="business_name" 
                     value={form.shop_name} 
                     onChange={(e) => setForm({ ...form, shop_name: e.target.value })} 

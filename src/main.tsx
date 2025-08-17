@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import "@styles/elementor.css"
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AppProvider } from "@context/AppContext";
 import HomePage from "@pages/customer/HomePage";
 import AuthPage from "@pages/customer/AuthPage";
 import ForgotPassword from "@pages/customer/ForgotPassword";
@@ -70,8 +71,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <AppProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </AppProvider>
   </StrictMode>
 );

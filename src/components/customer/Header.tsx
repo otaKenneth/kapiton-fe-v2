@@ -2,8 +2,11 @@ import { Search, ShoppingBag, X, Menu } from "lucide-react"
 import React, { useEffect, useRef, useState } from "react"
 import { NavLink } from "react-router-dom"
 import logoHeader from '../../images/logo-header.png'
+import { useAppContext } from "@context/AppContext";
 
 const Header = ({ onCartClick }: { onCartClick?: () => void }) => {
+  const { state, setState } = useAppContext();
+
   const productCategories = [
     {name: 'Clothing', url: '/products/collections/clothing'},
     {name: 'Electronics', url: '/products/collections/electronics'},
@@ -71,7 +74,11 @@ const Header = ({ onCartClick }: { onCartClick?: () => void }) => {
           {/* Desktop auth links - hidden on mobile */}
           <div className="hidden md:flex gap-x-4">
             <NavLink to="/become-merchant">Become a Seller</NavLink>
-            <NavLink to="/auth/customer">Login/Register</NavLink>
+            {state.token == null ? (
+              <NavLink to="/auth/customer">Login/Register</NavLink>
+            ) : (
+              <NavLink to="/user">{state.user.first_name} {state.user.last_name}</NavLink>
+            )}
           </div>
           
           {/* Mobile auth links - compact */}
