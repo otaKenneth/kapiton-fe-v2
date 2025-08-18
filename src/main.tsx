@@ -19,7 +19,7 @@ import {
   EmailConfirmed
 } from "@pages/customer/merchants";
 import {
-  UserPage
+  UserPage, Profile
 } from '@pages/customer/user_account';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -79,7 +79,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'profile',
-            element: <>Profile</>
+            element: <Profile />
           },
           {
             path: 'delivery-addresses',

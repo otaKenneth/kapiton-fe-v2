@@ -77,7 +77,7 @@ const Header = ({ onCartClick }: { onCartClick?: () => void }) => {
             {state.token == null ? (
               <NavLink to="/auth/customer">Login/Register</NavLink>
             ) : (
-              <NavLink to="/user">{state.user.first_name} {state.user.last_name}</NavLink>
+              <NavLink to="/user/profile">{state.user.first_name} {state.user.last_name}</NavLink>
             )}
           </div>
           

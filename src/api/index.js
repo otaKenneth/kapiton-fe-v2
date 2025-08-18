@@ -108,3 +108,19 @@ export async function customerLogout(token) {
     }
     return res.json();
 }
+
+export async function saveCustomerProfileInfo(token, formData) {
+    const res = await fetch(api_address + `user/profile`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw errorData;
+    }
+    return res.json();
+}
