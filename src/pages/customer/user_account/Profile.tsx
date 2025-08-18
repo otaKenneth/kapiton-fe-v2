@@ -5,12 +5,18 @@ import { saveCustomerProfileInfo } from "@api"
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export default () => {
-  const { state } = useAppContext();
+  const { state, setState } = useAppContext();
 
   const customerProfileInfoMutation = useMutation({
-    mutationFn: (token, formData) => saveCustomerProfileInfo(token, formData),
+    mutationFn: (formData) => saveCustomerProfileInfo(state.token, formData),
     onSuccess: (resp) => {
-      console.log(resp)
+      let userState = state.user
+      userState = {...userState, ...form};
+      setState({...state, 
+        user: userState
+      })
+      localStorage.setItem('user', JSON.stringify(userState))
+      setEditing(false)
     }
   });
 
@@ -23,7 +29,7 @@ export default () => {
     address: state.user.address || "",
     city: state.user.city || "",
     state: state.user.state || "",
-    country: state.user.country || "",
+    country: state.user.country || "Philippines",
     pincode: state.user.pincode || ""
   });
 
@@ -36,7 +42,7 @@ export default () => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    customerProfileInfoMutation.mutate(state.token, form);
+    customerProfileInfoMutation.mutate(form);
   };
 
   const [country, setCountry] = useState([

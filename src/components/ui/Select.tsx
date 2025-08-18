@@ -8,7 +8,6 @@ interface SelectProps {
 }
 
 const Select = ({ label, options, value, onChange }: SelectProps) => {
-  console.log(options)
   return (
     <div className="max-w-sm">
       {label && <label className="block mb-2 text-sm font-medium text-gray-700">{label}</label>}
