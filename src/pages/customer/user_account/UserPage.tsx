@@ -55,7 +55,7 @@ export default () => {
               </li>
             </ul>
           </nav>
-          <div className="w-100 user-details">
+          <div className="w-full user-details">
             <Outlet />
           </div>
         </div>

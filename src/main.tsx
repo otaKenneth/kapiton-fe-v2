@@ -19,7 +19,7 @@ import {
   EmailConfirmed
 } from "@pages/customer/merchants";
 import {
-  UserPage, Profile
+  UserPage, Profile, DeliveryAddresses
 } from '@pages/customer/user_account';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -83,7 +83,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'delivery-addresses',
-            element: <>Delivery Addresses</>
+            element: <DeliveryAddresses />
           },
           {
             path: 'change-password',

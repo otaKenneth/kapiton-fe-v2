@@ -124,3 +124,33 @@ export async function saveCustomerProfileInfo(token, formData) {
     }
     return res.json();
 }
+
+export async function customerDeliveryAddresses(token) {
+    const res = await fetch(api_address + `user/delivery-addresses`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw errorData;
+    }
+    return res.json();
+}
+
+export async function customerNewDeliveryAddresses(token, form) {
+    const res = await fetch(api_address + `user/delivery-addresses`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw errorData;
+    }
+    return res.json();
+}
