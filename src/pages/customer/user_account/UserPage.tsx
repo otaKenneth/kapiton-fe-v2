@@ -3,6 +3,7 @@ import NavButton from "./NavButton";
 import { useAppContext } from "@context/AppContext";
 import { customerLogout } from "@api" 
 import { useMutation } from "@tanstack/react-query";
+import { APIProvider } from '@vis.gl/react-google-maps';
 
 export default () => {
   const { state, setState } = useAppContext();
@@ -56,7 +57,12 @@ export default () => {
             </ul>
           </nav>
           <div className="w-full user-details">
-            <Outlet />
+            <APIProvider
+              apiKey={"AIzaSyCgSCMZFzvmUGXGCp1dBJHnSOU1iRBmyDY"}
+              onLoad={() => console.log('Maps API has loaded.')}
+            >
+              <Outlet />
+            </APIProvider>
           </div>
         </div>
       </div>

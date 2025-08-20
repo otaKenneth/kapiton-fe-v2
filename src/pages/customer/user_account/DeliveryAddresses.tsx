@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { useAppContext } from "@context/AppContext";
+import { Map, Marker, useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { Select } from "@components";
 import { 
   customerDeliveryAddresses, 
   customerNewDeliveryAddresses 
 } from "@api";
 
+
 export default () => {
+  const map = useMap();
+  const geocodingLib = useMapsLibrary('geocoding');
   const { state } = useAppContext();
+  const [markerPosition, setMarkerPosition] = useState({ lat: 14.5806494, lng: 121.0203798 });
   // Replace with your actual token source
-  const { data, isLoading, error } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ["customerDeliveryAddresses"],
     queryFn: () => customerDeliveryAddresses(state.token)
   });
@@ -24,22 +30,36 @@ export default () => {
     }
   })
 
+  useEffect(() => {
+    if (!map && !geocodingLib) return;
+  }, [map, geocodingLib]);
+
   // Form state for new address
   const [form, setForm] = useState({
     name: "",
     address: "",
     city: "",
-    province: "",
-    country: "",
+    province: "Metro Manila",
+    country: "Philippines",
     pincode: "",
     mobile: "",
-    lat: "",
-    lng: ""
+    lat: markerPosition.lat,
+    lng: markerPosition.lng
   });
   const [creating, setCreating] = useState(false);
 
   const handleChange = (field: string, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }));
+    // If the address field changes, geocode and update marker
+    // if (geocodingLib !== null && ['address', 'city', 'province'].find(v => v === field)) {
+    //   geocodingLib.Geocoder.geocode({ address: value }, (results, status) => {
+    //     if (status === 'OK' && results[0]) {
+    //       const { lat, lng } = results[0].geometry.location;
+    //       setMarkerPosition({ lat: lat, lng: lng });
+    //       setForm(prev => ({ ...prev, lat: lat, lng: lng }));
+    //     }
+    //   });
+    // }
   };
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -50,7 +70,25 @@ export default () => {
     // Optionally refetch addresses here
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  const handleMapClick = (e) => {
+    console.log(e)
+  }
+
+  const statesQuery = useQuery({
+    queryKey: ["countries"],
+    queryFn: async () => {
+      const res = await fetch("https://countriesnow.space/api/v0.1/countries/states/q?country=Philippines");
+      return await res.json();
+    },
+    initialData: [],
+    select: (resp) => resp.data.states.map(state => {
+      return {
+        value: state.name,
+        label: state.name
+      }
+    })
+  });
+ 
   if (error) return <div>Error loading addresses</div>;
 
   return (
@@ -76,18 +114,43 @@ export default () => {
         </div>
         {creating && (
           <form className="mt-4 grid gap-2" onSubmit={handleCreate}>
-              <input className="border p-2 rounded" placeholder="Recipient Name" value={form.name} onChange={e => handleChange('recipient', e.target.value)} />
-              <input className="border p-2 rounded" placeholder="Phone Number" value={form.mobile} onChange={e => handleChange('phone', e.target.value)} />
-              <input className="border p-2 rounded" placeholder="Street" value={form.address} onChange={e => handleChange('street', e.target.value)} />
-              <input className="border p-2 rounded" placeholder="City" value={form.city} onChange={e => handleChange('city', e.target.value)} />
-              <input className="border p-2 rounded" placeholder="Province" value={form.province} onChange={e => handleChange('province', e.target.value)} />
-              <input className="border p-2 rounded" placeholder="Country" value={form.country} onChange={e => handleChange('country', e.target.value)} />
-              <input className="border p-2 rounded" placeholder="ZIP" value={form.pincode} onChange={e => handleChange('zip', e.target.value)} />
-            <button className="btn btn-primary mt-2" type="submit">Save Address</button>
-            <button className="btn btn-secondary mt-2" type="button" onClick={() => setCreating(false)}>Cancel</button>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="colspan-5 grid gap-2">
+                <input className="border p-2 rounded" placeholder="Recipient Name" value={form.name} onChange={e => handleChange('recipient', e.target.value)} />
+                <input className="border p-2 rounded" placeholder="Phone Number" value={form.mobile} onChange={e => handleChange('phone', e.target.value)} />
+                <input className="border p-2 rounded" placeholder="Street Address" value={form.address} onChange={e => handleChange('address', e.target.value)} />
+                <input className="border p-2 rounded" placeholder="City" value={form.city} onChange={e => handleChange('city', e.target.value)} />
+                <Select 
+                  label="Province" 
+                  options={statesQuery.data} 
+                  value={form.province} 
+                  onChange={e => handleChange('province', e.target.value)}
+                />
+                <input className="border p-2 rounded" placeholder="Country" value={form.country} onChange={e => handleChange('country', e.target.value)} />
+                <input className="border p-2 rounded" placeholder="ZIP" value={form.pincode} onChange={e => handleChange('zip', e.target.value)} />
+              </div>
+
+              <div className="colspan-4 iframe-map rounded overflow-hidden">
+                <Map
+                    style={{ width: '100%', height: '100%' }}
+                    defaultCenter={markerPosition}
+                    defaultZoom={15}
+                    gestureHandling={'greedy'}
+                    disableDefaultUI={true}
+                    onClick={handleMapClick}
+                  >
+                    <Marker position={markerPosition} title={form.address} />
+                  </Map>
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-3 gap-2">
+              <button className="btn btn-primary mt-2 px-4 py-2 rounded bg-primary" type="submit">Save Address</button>
+              <button className="btn btn-secondary mt-2 px-4 py-2 rounded bg-red-500" type="button" onClick={() => setCreating(false)}>Cancel</button>
+            </div>
           </form>
         )}
       </div>
-    </>   
+    </>
   );
 }
