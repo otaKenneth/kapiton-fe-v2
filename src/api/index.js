@@ -146,7 +146,7 @@ export async function customerNewDeliveryAddresses(token, form) {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(form)
     });
     if (!res.ok) {
         const errorData = await res.json();
