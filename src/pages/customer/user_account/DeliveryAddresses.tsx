@@ -3,7 +3,7 @@ import { Trash2 } from "lucide-react";
 import { useAppContext } from "@context/AppContext";
 import { Map, Marker, useMapsLibrary, useMarkerRef } from '@vis.gl/react-google-maps';
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Select } from "@components";
+import { Select, useMessageDialog } from "@components";
 import { 
   customerDeliveryAddresses, 
   customerNewDeliveryAddresses,
@@ -13,6 +13,7 @@ import {
 
 export default () => {
   const geocodingLib = useMapsLibrary('geocoding');
+  const { showMessage } = useMessageDialog();
   const [markerRef] = useMarkerRef();
   const { state } = useAppContext();
   const [markerPosition, setMarkerPosition] = useState({ lat: 14.5806494, lng: 121.0203798 });
@@ -25,12 +26,24 @@ export default () => {
   const newDeliveryAddressMutation = useMutation({
     mutationFn: (formData) => customerNewDeliveryAddresses(state.token, formData),
     onSuccess: (resp) => {
+      showMessage({
+        open: true,
+        message: resp.message,
+        type: "success",
+        title: "New Delivery Address"
+      });
       let newAddress = resp.data;
       data.push(newAddress);
       setCreating(false);
       setSaving(false)
     },
     onError: (error) => {
+      showMessage({
+        open: true,
+        message: error.message,
+        type: "error",
+        title: "New Delivery Address"
+      });
       setSaving(false)
       if (error.errors)
         setFormError(Object.values(error.errors)[0]);
@@ -42,6 +55,7 @@ export default () => {
     onSuccess: (resp) => {
       if (resp.successs) {
         let m = data.filter(f => f.id == resp.data.id)
+        console.log(m, Object.keys(m))
         data.unshift(Object.keys(m), 1);
       }
     },

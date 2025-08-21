@@ -1,10 +1,20 @@
-import Header from "@components/customer/Header";
-import Footer from "@components/customer/Footer";
+import { MessageDialog, Header, Footer } from "@components";
 import { Outlet } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const CustomerMainLayout = () => {
+  const queryClient = useQueryClient();
+  const dialogState = queryClient.getQueryData("messageDialog") || { open: false, type: "info", message: "" };
   const [cartOpen, setCartOpen] = useState(false);
+
+  const handleCloseDialog = () => {
+    queryClient.setQueryData("messageDialog", { open: false, type: "info", message: "" });
+  };
+
+  useEffect(() => {
+    queryClient.getQueryData("messageDialog")
+  }, [queryClient.getQueryData("messageDialog")])
 
   return (
     <div className="bg-primaryBackground overflow-x-hidden">
@@ -37,6 +47,13 @@ const CustomerMainLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <MessageDialog
+        open={dialogState.open}
+        type={dialogState.type}
+        title={dialogState.title}
+        message={dialogState.message}
+        onClose={() => handleCloseDialog}
+      />
     </div>
   );
 };
