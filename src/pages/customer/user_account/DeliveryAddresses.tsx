@@ -1,11 +1,13 @@
-import { useState , useEffect} from "react";
+import { useState } from "react";
+import { Trash2 } from "lucide-react";
 import { useAppContext } from "@context/AppContext";
 import { Map, Marker, useMapsLibrary, useMarkerRef } from '@vis.gl/react-google-maps';
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Select } from "@components";
 import { 
   customerDeliveryAddresses, 
-  customerNewDeliveryAddresses 
+  customerNewDeliveryAddresses,
+  customerDeleteDeliveryAddress 
 } from "@api";
 
 
@@ -23,12 +25,28 @@ export default () => {
   const newDeliveryAddressMutation = useMutation({
     mutationFn: (formData) => customerNewDeliveryAddresses(state.token, formData),
     onSuccess: (resp) => {
-      console.log(resp)
+      let newAddress = resp.data;
+      data.push(newAddress);
       setCreating(false);
+      setSaving(false)
     },
     onError: (error) => {
+      setSaving(false)
       if (error.errors)
         setFormError(Object.values(error.errors)[0]);
+    }
+  })
+
+  const rmDeliveryAddressMutation = useMutation({
+    mutationFn: (id) => customerDeleteDeliveryAddress(state.token, id),
+    onSuccess: (resp) => {
+      if (resp.successs) {
+        let m = data.filter(f => f.id == resp.data.id)
+        data.unshift(Object.keys(m), 1);
+      }
+    },
+    onError: (error) => {
+      console.log(error)
     }
   })
 
@@ -44,6 +62,7 @@ export default () => {
     lat: markerPosition.lat,
     lng: markerPosition.lng
   });
+  const [saving, setSaving] = useState(false)
   const [creating, setCreating] = useState(false);
   const [formError, setFormError] = useState("")
 
@@ -64,6 +83,7 @@ export default () => {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSaving(true)
     // Replace with your actual API call to create address
     newDeliveryAddressMutation.mutate(form)
   };
@@ -98,6 +118,10 @@ export default () => {
     });
   }
 
+  const handleDeleteAddress = (value) => {
+    rmDeliveryAddressMutation.mutate(value)
+  }
+
   const statesQuery = useQuery({
     queryKey: ["countries"],
     queryFn: async () => {
@@ -118,24 +142,7 @@ export default () => {
   return (
     <>
       <div className="bg-white rounded-lg shadow px-3 py-3">
-        <div className="grid grid-cols-3 gap-4">
-          {data && data.length > 0 ? (
-            data.map((address: any, idx: number) => (
-              <div key={idx} className="delivery-address-details p-4 border rounded w-full">
-                <div><h1 className="font-semibold text-2xl">{address.name}</h1></div>
-                <div><span className="font-semibold">Mobile:</span> {address.mobile}</div>
-                <div><span className="font-semibold">Street:</span> {address.address}</div>
-                <div><span className="font-semibold">City:</span> {address.city}</div>
-                <div><span className="font-semibold">Province:</span> {address.state}</div>
-                <div><span className="font-semibold">Country:</span> {address.country}</div>
-                <div><span className="font-semibold">ZIP:</span> {address.pincode}</div>
-              </div>
-            ))
-          ) : (
-            isLoading ? <div>Loading...</div>:<div>No delivery addresses found.</div>
-          )}
-        </div>
-        <div className="flex justify-between items-center my-3">
+        <div className="flex justify-between items-center mb-3">
           <button className="btn btn-primary bg-primary font-semibold rounded px-3 py-2" onClick={() => setCreating(true)}>Add New Address</button>
         </div>
         {creating && (
@@ -223,13 +230,39 @@ export default () => {
 
             <div className="flex justify-between mt-3 gap-2">
               <span className="text-sm text-red-600 font-bold">{formError}</span>
-              <div>
-                <button className="btn btn-primary mt-2 px-4 py-2 rounded bg-primary" type="submit">Save Address</button>
+              <div className="flex gap-2">
+                {!saving && (
+                  <button className="btn btn-primary mt-2 px-4 py-2 rounded bg-primary" type="submit">Save Address</button>
+                )}
                 <button className="btn btn-secondary mt-2 px-4 py-2 rounded bg-red-500" type="button" onClick={() => setCreating(false)}>Cancel</button>
               </div>
             </div>
           </form>
         )}
+        <div><h1 className="font-bold text-2xl">List</h1></div>
+        <div className="grid grid-cols-3 gap-4 mt-3">
+          {data && data.length > 0 ? (
+            data.map((address: any, idx: number) => (
+              <div key={idx} className="delivery-address-details p-4 border rounded w-full">
+                <div className="flex justify-between">
+                  <h1 className="font-semibold text-2xl">{address.name}</h1>
+                  <Trash2 
+                    className="text-red-500 text-sm cursor-pointer" 
+                    onClick={() => handleDeleteAddress(address.id)} 
+                  />
+                </div>
+                <div><span className="font-semibold">Mobile:</span> {address.mobile}</div>
+                <div><span className="font-semibold">Street:</span> {address.address}</div>
+                <div><span className="font-semibold">City:</span> {address.city}</div>
+                <div><span className="font-semibold">Province:</span> {address.state}</div>
+                <div><span className="font-semibold">Country:</span> {address.country}</div>
+                <div><span className="font-semibold">ZIP:</span> {address.pincode}</div>
+              </div>
+            ))
+          ) : (
+            isLoading ? <div>Loading...</div>:<div>No delivery addresses found.</div>
+          )}
+        </div>
       </div>
     </>
   );

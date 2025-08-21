@@ -154,3 +154,18 @@ export async function customerNewDeliveryAddresses(token, form) {
     }
     return res.json();
 }
+
+export async function customerDeleteDeliveryAddress(token, id) {
+    const res = await fetch(api_address + `user/delivery-addresses/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw errorData;
+    }
+    return res.json();
+}
