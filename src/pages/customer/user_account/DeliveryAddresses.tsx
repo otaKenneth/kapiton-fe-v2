@@ -53,10 +53,16 @@ export default () => {
   const rmDeliveryAddressMutation = useMutation({
     mutationFn: (id) => customerDeleteDeliveryAddress(state.token, id),
     onSuccess: (resp) => {
-      if (resp.successs) {
-        let m = data.filter(f => f.id == resp.data.id)
-        console.log(m, Object.keys(m))
-        data.unshift(Object.keys(m), 1);
+      if (resp.success) {
+        let m = data.findIndex(f => f.id == resp.data.id)
+        data.splice(m, 1);
+
+        showMessage({
+          open: true,
+          message: resp.message,
+          type: "success",
+          title: "Deleted Delivery Address"
+        });
       }
     },
     onError: (error) => {

@@ -1,24 +1,42 @@
-import React from "react";
 import Dialog from "./Dialog";
+import { useQuery } from "@tanstack/react-query";
+import { useMessageDialog, type MessageDialogState } from "./useMessageDialog";
+import { useEffect } from "react";
 
-export type MessageDialogType = "success" | "info" | "error";
+const defaultState: MessageDialogState = {
+  open: false,
+  type: "info",
+  title: "",
+  message: "",
+};
 
-interface MessageDialogProps {
-  open: boolean;
-  type: MessageDialogType;
-  title?: string;
-  message: string;
-  onClose: () => void;
-}
+const AUTO_CLOSE_DELAY = 3000;
 
-const MessageDialog: React.FC<MessageDialogProps> = ({ open, type, title, message, onClose }) => {
+const MessageDialog = () => {
+  const { data } = useQuery({
+    queryKey: ["messageDialog"],
+    initialData: defaultState, // 👈 prevents "undefined"
+    queryFn: () => defaultState,
+  });
+  const { closeMessage } = useMessageDialog();
+
+  useEffect(() => {
+    if (data.open) {
+      const timer = setTimeout(() => {
+        closeMessage();
+      }, AUTO_CLOSE_DELAY);
+
+      return () => clearTimeout(timer); // cleanup if dialog closes early
+    }
+  }, [data.open, closeMessage]);
+
   return (
     <Dialog
-      open={open}
-      type={type}
-      title={title}
-      message={message}
-      onClose={onClose}
+      open={data.open}
+      type={data.type}
+      title={data.title}
+      message={data.message}
+      onClose={closeMessage}
     />
   );
 };

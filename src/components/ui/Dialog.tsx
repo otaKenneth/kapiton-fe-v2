@@ -6,6 +6,7 @@ type DialogProps = {
   message: string;
   onClose: () => void;
   type?: "info" | "success" | "error";
+  closeBtn?: boolean
 };
 
 const dialogStyles = {
@@ -16,7 +17,7 @@ const dialogStyles = {
   error: "border-l-4 border-red-500",
 };
 
-const Dialog: React.FC<DialogProps> = ({ open, title, message, onClose, type = "info" }) => {
+const Dialog: React.FC<DialogProps> = ({ open, title, message, onClose, type = "info", closeBtn = false }) => {
   if (!open) return null;
   return (
     <div className={dialogStyles.base} onClick={onClose}>
@@ -26,12 +27,14 @@ const Dialog: React.FC<DialogProps> = ({ open, title, message, onClose, type = "
       >
         {title && <div className="font-bold mb-2">{title}</div>}
         <div className="mb-4">{message}</div>
-        <button
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-          onClick={onClose}
-        >
-          Close
-        </button>
+        {closeBtn && 
+          <button
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            onClick={onClose}
+          >
+            Close
+          </button>
+        }
       </div>
     </div>
   );

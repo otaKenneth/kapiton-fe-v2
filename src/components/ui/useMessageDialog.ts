@@ -7,13 +7,20 @@ export type MessageDialogState = {
   message: string;
 };
 
+const defaultState: MessageDialogState = {
+  open: false,
+  type: "info",
+  title: "",
+  message: "",
+};
+
 export const useMessageDialog = () => {
   const queryClient = useQueryClient();
   const showMessage = (state: MessageDialogState) => {
-    queryClient.setQueryData("messageDialog", state);
+    queryClient.setQueryData(["messageDialog"], state);
   };
   const closeMessage = () => {
-    queryClient.setQueryData("messageDialog", { open: false, type: "info", message: "" });
+    queryClient.setQueryData(["messageDialog"], defaultState);
   };
   return { showMessage, closeMessage };
 };
