@@ -3,7 +3,7 @@ const Input = ({ label, id, value, onChange, ...props }: { label: string; id: st
     <>
     <div className="relative pt-2 border-2 border-gray-300 rounded-md focus-within:border-blue-600 overflow-hidden">
       <input
-        type="text"
+        type={props.type || "text"}
         id={id}
         value={value}
         onChange={onChange}

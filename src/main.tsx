@@ -19,7 +19,8 @@ import {
   EmailConfirmed
 } from "@pages/customer/merchants";
 import {
-  UserPage, Profile, DeliveryAddresses
+  UserPage, Profile, DeliveryAddresses,
+  ChangePassword, OrdersList, Wishlist, Chats
 } from '@pages/customer/user_account';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -87,19 +88,19 @@ const router = createBrowserRouter([
           },
           {
             path: 'change-password',
-            element: <>Chage Password</>
+            element: <ChangePassword />
           },
           {
             path: 'orders',
-            element: <>Orders</>
+            element: <OrdersList />
           },
           {
             path: 'wishlist',
-            element: <>Wishlist</>
+            element: <Wishlist />
           },
           {
             path: 'chats',
-            element: <>Chats</>
+            element: <Chats />
           },
         ]
       }

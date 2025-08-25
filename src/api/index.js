@@ -169,3 +169,19 @@ export async function customerDeleteDeliveryAddress(token, id) {
     }
     return res.json();
 }
+
+export async function customerChangePassword(token, form) {
+    const res = await fetch(api_address + `user/update-password`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(form)
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw errorData;
+    }
+    return res.json();
+}
