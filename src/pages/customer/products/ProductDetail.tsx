@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { productDetails } from "@api";
-import Select from "@components/ui/Select";
-import QuantityInput from "@components/ui/Quantity";
+import { Select, QuantityInput } from "@components";
 import { formatPeso } from "@lib/utils";
+import { PDSkeleton } from "./components";
 
 const productDetail = () => {
   const { id } = useParams();
@@ -75,7 +75,7 @@ const productDetail = () => {
   }, [isSuccess, data]);
 
   if (isFetching) {
-    return <div className="p-4 sm:p-6 md:p-8 text-green-900 text-4xl w-full text-center">Loading...</div>;
+    return <PDSkeleton />;
   }
 
   if (isError) {

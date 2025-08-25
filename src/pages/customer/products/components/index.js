@@ -1,0 +1,1 @@
+export { default as PDSkeleton } from "./ProductDetailSkeleton";
