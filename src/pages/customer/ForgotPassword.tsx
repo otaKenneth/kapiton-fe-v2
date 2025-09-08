@@ -7,18 +7,22 @@ export default () => {
     email: ""
   });
 
+  const [submitting, setSubmitting] = useState(false);
   const submitForgotPassEmail = useMutation({
     mutationFn: (formData) => sendForgotPassEmail(formData),
     onSuccess: (resp) => {
+      setSubmitting(false)
       console.log(resp)
     },
     onError: (error) => {
+      setSubmitting(false)
       console.log(error)
     }
   })
 
   const handleSumit = (e) => {
     e.preventDefault();
+    setSubmitting(true)
     submitForgotPassEmail.mutate(form)
   }
 
@@ -44,7 +48,12 @@ export default () => {
             <span className="text-sm text-red error"></span>
 
             <div className="mt-9 flex flex-col gap-y-2">
-              <button type="submit" className="font-primary font-bold bg-primaryContrast px-8 py-2 w-[20rem] text-white flex justify-center items-center rounded-full">Submit</button>
+              <button type="submit" className={[
+                "font-primary font-bold bg-primaryContrast px-8 py-2 w-[20rem] text-white flex justify-center items-center rounded-full",
+                submitting ? 'opacity-50 cursor-not-allowed' : ''
+              ].join(' ')} disabled={submitting}>
+                {submitting ? 'SUBMITTING' : 'Submit'}
+              </button>
 
               <a href="/auth/customer" className="underline text-center mt-4">Back to Login</a>
             </div>

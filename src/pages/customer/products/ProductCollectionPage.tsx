@@ -1,3 +1,5 @@
+import * as React from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useQuery } from '@tanstack/react-query'; // Import useQuery
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -8,13 +10,58 @@ import ProductCard from './ProductCard';
 const ProductsCollectionPage = () => {
   const { collectType, collectionId } = useParams();
   const navigate = useNavigate();
+  const sentinelRef = React.useRef<HTMLDivElement | null>(null);
 
-  const { data, isFetching } = useQuery({
-    queryKey: ['products', collectionId],
-    queryFn: () => productsQuery(collectType, collectionId),
-    initialData: {data: []},
-    select: (data) => data.data
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["products", collectionId],
+    queryFn: ({ pageParam = 1 }) => productsQuery(collectType, collectionId, pageParam),
+    getNextPageParam: (lastPage) => {
+      // Assuming your API returns pagination info like { current_page, last_page }
+      if (lastPage.current_page < lastPage.last_page) {
+        return lastPage.current_page + 1;
+      }
+      return undefined; // no more pages
+    },
+    initialPageParam: 1,
+    initialData: {
+      pages: [
+        {
+          data: []
+        }
+      ],
+      pageParams: [],
+      total: 0
+    }
   });
+  console.log(data)
+
+  const products = data?.pages.flatMap((page) => page.data) ?? [];
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0 } // Trigger when fully visible
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (!collectionId) {
     navigate("/");
@@ -56,20 +103,30 @@ const ProductsCollectionPage = () => {
       <div className="flex flex-col md:flex-row mt-4 gap-y-8 md:gap-y-0">
         <ProductFilters />
 
-        {/* products */}
-        <div className="w-full md:w-4/5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-2 gap-y-6 pb-8">
-          {isFetching ? (
-            <div className="w-full text-center py-20">
-              <p className="font-body text-xl">Loading...</p>
-            </div>
-          ) : data.length == 0 ? (
+        <div>
+          {/* products */}
+          {products.length === 0 && !isFetchingNextPage ? (
             <div className="w-full text-center py-20">
               <p className="font-body text-xl">No Results Found...</p>
             </div>
-          ) : data?.map((tp, i) => (
-            <ProductCard key={i} product={tp} />
-          ))}
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+
+          {/* Loader */}
+          {isFetchingNextPage && (
+            <div className="w-full text-center py-20">
+              <p className="font-body text-xl">Loading...</p>
+            </div>
+          )}
+          
+          <div id="product-collection-hit-scroll" ref={sentinelRef} className="h-4"></div>
         </div>
+
       </div>
     </div>
   );

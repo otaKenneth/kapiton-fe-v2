@@ -16,8 +16,8 @@ export async function discounts () {
     return res.json();
 }
 
-export async function productsQuery (type = "collection", page_title = "all") {
-    const res = await fetch(api_address + `products/${type}/${page_title}`)
+export async function productsQuery (type = "collection", page_title = "all", page) {
+    const res = await fetch(api_address + `products/${type}/${page_title}?page=${page}`)
     if (!res.ok) throw new Error("Failed to fetch.");
     return res.json();
 }

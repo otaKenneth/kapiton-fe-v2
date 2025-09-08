@@ -6,8 +6,8 @@ const ProductsDetailPage = () => {
   return (
     <div className="elementor">
       <ProductDetail />
-      <RelatedProducts />
       <ProductReviews />
+      <RelatedProducts />
     </div>
   );
 };
