@@ -110,10 +110,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AppProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <AppProvider>
         <RouterProvider router={router} />
-      </QueryClientProvider>
-    </AppProvider>
+      </AppProvider>
+    </QueryClientProvider>
   </StrictMode>
 );

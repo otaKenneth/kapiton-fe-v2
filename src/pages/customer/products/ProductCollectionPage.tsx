@@ -1,16 +1,18 @@
 import * as React from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useQuery } from '@tanstack/react-query'; // Import useQuery
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-
-import { productsQuery } from "@api";
+import { useMessageDialog } from '@components';
+import { productsQuery, addProductToCart } from "@api";
 import ProductFilters from './ProductFilters';
 import ProductCard from './ProductCard';
+import { useAppContext } from "@context/AppContext";
 
 const ProductsCollectionPage = () => {
   const { collectType, collectionId } = useParams();
   const navigate = useNavigate();
   const sentinelRef = React.useRef<HTMLDivElement | null>(null);
+  const { showMessage } = useMessageDialog()
+  const { state, setState } = useAppContext();
 
   const {
     data,
@@ -38,7 +40,33 @@ const ProductsCollectionPage = () => {
       total: 0
     }
   });
-  console.log(data)
+
+  const addtocartMutation = useMutation({
+    mutationFn: (product) => addProductToCart(state.token, product),
+    onSuccess: (resp) => {
+      console.log("Added to cart:", resp);
+      if (resp.success) {
+        setState(prev => ({
+          ...prev,
+          cart: resp.data
+        }))
+        showMessage({
+          open: true,
+          message: resp.message,
+          type: "success",
+          title: "Success!"
+        })
+      }
+    },
+    onError: (error) => {
+      showMessage({
+        open: true,
+        message: error.message,
+        type: "error",
+        title: "Error!"
+      })
+    }
+  });
 
   const products = data?.pages.flatMap((page) => page.data) ?? [];
 
@@ -62,6 +90,15 @@ const ProductsCollectionPage = () => {
       }
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const handleQuickAdd = (product:object) => {
+    // console.log(product)
+    addtocartMutation.mutate({
+      quantity: 1,
+      product_id: product['id'],
+      product_name: product['product_name'],
+    });
+  }
 
   if (!collectionId) {
     navigate("/");
@@ -112,7 +149,9 @@ const ProductsCollectionPage = () => {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} 
+                  onQuickAdd={handleQuickAdd}
+                />
               ))}
             </div>
           )}

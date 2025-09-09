@@ -185,3 +185,33 @@ export async function customerChangePassword(token, form) {
     }
     return res.json();
 }
+
+export async function getCart(token = "") {
+    const res = await fetch(api_address + `cart`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw errorData;
+    }
+    return res.json();
+}
+
+export async function addProductToCart(token = '', product) {
+    const res = await fetch(api_address + `cart/add`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(product)
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw errorData;
+    }
+    return res.json();
+}
