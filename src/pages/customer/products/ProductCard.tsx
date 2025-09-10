@@ -33,10 +33,10 @@ const ProductCard = ({product, onQuickAdd, ...otherProps} : ProductCardProps) =>
             <div className="mt-2 flex items-center gap-x-2">
               <h1 className="font-primary">
                 {formatPeso(
-                  product.discountedPrice ? product.discountedPrice : product.product_price
+                  product.discounted_price ? product.discounted_price : product.product_price
                 )}
               </h1>
-              {product.discountedPrice && (
+              {product.discounted_price && (
                 <p className="line-through italic text-xs">
                   {formatPeso(product.product_price)}
                 </p>

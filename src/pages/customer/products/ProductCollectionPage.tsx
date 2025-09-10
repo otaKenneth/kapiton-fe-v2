@@ -7,6 +7,13 @@ import ProductFilters from './ProductFilters';
 import ProductCard from './ProductCard';
 import { useAppContext } from "@context/AppContext";
 
+type AddToCartPayload = { product_id: any; product_name: any; quantity: number; guest_token: string };
+
+type Product = {
+  id: string | number;
+  product_name: string;
+};
+
 const ProductsCollectionPage = () => {
   const { collectType, collectionId } = useParams();
   const navigate = useNavigate();
@@ -42,7 +49,7 @@ const ProductsCollectionPage = () => {
   });
 
   const addtocartMutation = useMutation({
-    mutationFn: (product) => addProductToCart(state.token, product),
+    mutationFn: (product : AddToCartPayload) => addProductToCart(state.token, product),
     onSuccess: (resp) => {
       console.log("Added to cart:", resp);
       if (resp.success) {
@@ -91,12 +98,13 @@ const ProductsCollectionPage = () => {
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const handleQuickAdd = (product:object) => {
+  const handleQuickAdd = (product: Product) => {
     // console.log(product)
     addtocartMutation.mutate({
+      guest_token: state.guest_token,
       quantity: 1,
-      product_id: product['id'],
-      product_name: product['product_name'],
+      product_id: product.id,
+      product_name: product.product_name,
     });
   }
 
