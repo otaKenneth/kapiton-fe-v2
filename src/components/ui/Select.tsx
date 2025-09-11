@@ -7,7 +7,7 @@ interface SelectProps {
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const Select = ({ label, options, value, onChange }: SelectProps) => {
+const Select = ({ label, options, value, onChange, ...otherProps }: SelectProps) => {
   return (
     <div className="max-w-sm">
       {label && <label className="block mb-2 text-sm font-medium text-gray-700">{label}</label>}
@@ -17,7 +17,7 @@ const Select = ({ label, options, value, onChange }: SelectProps) => {
         className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
       >
         {options.map((opt) => (
-          <option key={opt.value} value={opt.value} data-label={label}>
+          <option key={opt.value} value={opt.value} data-label={label} data-attributeCol={otherProps['data-attributeCol']}>
             {opt.label}
           </option>
         ))}

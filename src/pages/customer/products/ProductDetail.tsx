@@ -1,17 +1,38 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { productDetails } from "@api";
-import { Select, QuantityInput } from "@components";
+import { useAppContext } from "@context/AppContext";
+import { productDetails, addProductToCart } from "@api";
+import { Select, QuantityInput, useMessageDialog } from "@components";
 import { formatPeso } from "@lib/utils";
 import { PDSkeleton } from "./components";
 
+type CartProductPayload = { product_id: any; product_name: any; quantity: number; guest_token: string, stock: number, variant: object };
+
 const productDetail = () => {
   const { id } = useParams();
+  const { state, setState } = useAppContext();
+  const { showMessage } = useMessageDialog();
   const [quantity, setQuantity] = useState(1);
   const [maxQuantity, setMaxQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState({});
   const [attributePrice, setAttributePrice] = useState(0);
+
+  const addtocartMutation = useMutation({
+    mutationFn: (product : CartProductPayload) => addProductToCart(state.token, product),
+    onSuccess: (resp : any) => {
+      setState(prev => ({
+        ...prev,
+        cart: resp.data
+      }))
+      showMessage({
+        open: true,
+        message: resp.message,
+        title: "Success",
+        type: "success"
+      })
+    }
+  });
 
   const { data, isFetching, isSuccess, isError, error } = useQuery({
     queryKey: ['productDetails', id],
@@ -42,8 +63,9 @@ const productDetail = () => {
   function handleVariantSelect(e: React.ChangeEvent<HTMLSelectElement>) {
     var selectedValue = e.target.value;
     var selectedLabel = e.target.options[e.target.selectedIndex].getAttribute("data-label");
+    var selectedAttributeCol = e.target.options[e.target.selectedIndex].getAttribute("data-attributeCol");
 
-    setSelectedVariant(prev => ({ ...prev, [selectedLabel]: selectedValue }));
+    setSelectedVariant(prev => ({ ...prev, [selectedLabel]: selectedValue, [selectedAttributeCol]: selectedValue }));
     const selectedOptions = selectedVariant;
     selectedOptions[selectedLabel] = selectedValue;
     
@@ -73,6 +95,18 @@ const productDetail = () => {
       }
     }
   }, [isSuccess, data]);
+
+  const handleAddToCartClick = () => {
+    const product: CartProductPayload = {
+      product_id: data.id,
+      product_name: data.product_name,
+      quantity,
+      stock: maxQuantity,
+      guest_token: state.guest_token,
+      variant: selectedVariant
+    };
+    addtocartMutation.mutate(product);
+  }
 
   if (isFetching) {
     return <PDSkeleton />;
@@ -118,7 +152,7 @@ const productDetail = () => {
           <div className="flex flex-col justify-start align-center gap-4">
             <div className="flex flex-row align-center gap-5">
               {data?.variants.map((variant, key) => (
-                <Select key={key} label={variant.variant_name} 
+                <Select key={key} label={variant.variant_name} data-attributeCol={key == 0 ? "color" : "size"}
                   options={getVariantOptions(key, variant.attributes)} 
                   value={selectedVariant[variant.variant_name]} 
                   onChange={handleVariantSelect} 
@@ -135,7 +169,7 @@ const productDetail = () => {
             </div>
             {maxQuantity > 0 ? (
               <div className="elementor-kit-6 pdp-min-with-btn elementor-element element-products-detail-page">
-                <button type="submit" className="elementor-button px-4 py-3">
+                <button type="submit" className="elementor-button px-4 py-3" onClick={handleAddToCartClick}>
                   <span className="text-sm">Add to Cart</span>
                 </button>
               </div>
