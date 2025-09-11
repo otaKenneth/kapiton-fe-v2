@@ -14,6 +14,9 @@ import {
   ProductsCollectionPage
 } from "@pages/customer/products";
 import {
+  Cart
+} from "@pages/customer/checkout";
+import {
   MerchantsPage,
   BecomeMerchant,
   EmailConfirmed
@@ -60,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: "/become-merchant",
         element: <BecomeMerchant />
+      },
+      {
+        path: '/cart',
+        element: <Cart />
       },
       {
         path: "/auth/customer",
