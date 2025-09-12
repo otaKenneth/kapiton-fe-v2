@@ -1,6 +1,6 @@
 import { MessageDialog, Header, Footer, useMessageDialog } from "@components";
-import { Outlet } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { useAppContext } from "@context/AppContext";
 import { formatPeso } from "@lib/utils";
 import { useMutation } from "@tanstack/react-query";
@@ -17,6 +17,7 @@ type Cart = {
 const CustomerMainLayout = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [subtotal, setSubtotal] = useState(0);
+  const navigate = useNavigate();
   const { state, setState } = useAppContext();
   const { showMessage } = useMessageDialog();
 
@@ -72,6 +73,13 @@ const CustomerMainLayout = () => {
       guest_token: state.guest_token
     }
     updateCartItemQuantityMutation.mutate(data);
+  }
+
+  const handleCheckout = () => {
+    if (state.token) {
+      // redirect to cart page using react router
+      navigate('/cart');
+    }
   }
 
   React.useEffect(() => {
@@ -138,7 +146,9 @@ const CustomerMainLayout = () => {
 
         <div className="bottom-0 px-4 relative border-t py-4">
           <p className="text-sm text-gray-600 pb-5">Subtotal: <span className="font-semibold">{formatPeso(subtotal)}</span></p>
-          <button className="bg-primaryContrast text-white font-primary font-semibold text-sm w-full py-2 rounded-full">Checkout</button>
+          <button className="bg-primaryContrast text-white font-primary font-semibold text-sm w-full py-2 rounded-full" 
+            onClick={handleCheckout}
+          >Checkout</button>
         </div>
       </div>
       {/* Overlay */}
