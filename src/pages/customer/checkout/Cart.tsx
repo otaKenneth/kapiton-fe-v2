@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useMessageDialog } from "@components";
 import { useAppContext } from "@context/AppContext";
 import { formatPeso } from "@lib/utils";
@@ -14,6 +15,7 @@ type Cart = {
 }
 
 const Cart: React.FC = () => {
+  const navigate = useNavigate();
   const { state, setState } = useAppContext();
   const { showMessage } = useMessageDialog();
   const [coupon, setCoupon] = React.useState('');
@@ -124,6 +126,21 @@ const Cart: React.FC = () => {
     checkPromoCodeMutation.mutate({ guest_token: state.guest_token, code: coupon });
   }
 
+  const handleCheckout = () => {
+    setState(prev => ({
+      ...prev,
+      user: {
+        ...prev.user,
+        defaultAddress: deliveryAddressesQuery.data[0],
+        deliveryAddresses: deliveryAddressesQuery.data
+      },
+      couponDetails: couponDetails,
+      cart: cartItems,
+      cart_subtotal: subtotal
+    }))
+    navigate('/checkout');
+  }
+
   React.useEffect(() => {
     if (deliveryAddressesQuery.isFetched && deliveryAddressesQuery.data) {
       setState(prev => ({
@@ -142,12 +159,12 @@ const Cart: React.FC = () => {
   }, [state.cart])
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="w-[80vw] mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
       {/* Layout: Cart list on the left, promo and address on the right */}
-      <div className="mt-8 flex flex-col lg:flex-row gap-8">
+      <div className="grid grid-cols-12 mt-8 gap-4">
         {/* Left: Cart List */}
-        <div className="bg-white shadow rounded-lg p-4 flex-[2]">
+        <div className="bg-white shadow col-span-7 rounded-lg p-4 flex-[2]">
           <ul>
             {cartItems.map((item) => (
               <li
@@ -267,12 +284,15 @@ const Cart: React.FC = () => {
               <span>Total</span>
               <span>{formatPeso(subtotal - couponDetails.couponAmount)}</span>
             </div>
-            <button
-              className="w-full mt-6 bg-primary text-black py-3 rounded hover:font-semibold transition"
-              type="button"
-            >
-              Proceed to Checkout
-            </button>
+            {cartItems.length > 0 && (
+              <button
+                className="w-full mt-6 bg-primary text-black py-3 rounded hover:font-semibold transition"
+                type="button"
+                onClick={handleCheckout}
+              >
+                Proceed to Checkout
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -14,7 +14,7 @@ import {
   ProductsCollectionPage
 } from "@pages/customer/products";
 import {
-  Cart
+  Cart, Checkout
 } from "@pages/customer/checkout";
 import {
   MerchantsPage,
@@ -67,6 +67,10 @@ const router = createBrowserRouter([
       {
         path: '/cart',
         element: <Cart />
+      },
+      {
+        path: '/checkout',
+        element: <Checkout />
       },
       {
         path: "/auth/customer",
