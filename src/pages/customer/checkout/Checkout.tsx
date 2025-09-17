@@ -1,6 +1,8 @@
 import React from "react";
 import { useAppContext } from "@context/AppContext";
 import { formatPeso } from "@lib/utils";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { selectDeliveryAddress } from "@api";
 
 export default () => {  
   const { state } = useAppContext();
@@ -9,6 +11,47 @@ export default () => {
     couponAmount: 0
   };
   const subtotal = state.cart_subtotal
+  const total_qty = cartItems.reduce(
+    (sum, item) => sum += item.quantity,
+    0
+  );
+  const [methods, setMethods] = React.useState({
+    'shipping': {
+      charges: 0,
+      type: ''
+    },
+    'payment': {
+      type: 'paymongo',
+      charges: subtotal - couponDetails.couponAmount
+    }
+  })
+
+  const deliveryComputeMutation = useMutation({
+    mutationFn: (data) => selectDeliveryAddress(state.token, data),
+    onSuccess: (resp: any) => {
+      setMethods(prev => ({
+        ...prev,
+        shipping: {
+          type: resp.data.method.type,
+          charges: resp.data.charges
+        }
+      }))
+    }
+  })
+
+  const handleSelectShipping = (e) => {
+    if (typeof state.user.defaultAddress !== 'undefined') {
+      const data = {
+        guest_token: state.guest_token,
+        method: e.target.value,
+        cart: cartItems,
+        total_qty: total_qty,
+        total_amount: subtotal - couponDetails.couponAmount,
+        delivery_address: state.user.defaultAddress
+      }
+      deliveryComputeMutation.mutate(data)
+    }
+  }
 
   return (
     <div className="w-[80vw] mx-auto p-6">
@@ -96,7 +139,7 @@ export default () => {
                 type="radio"
                 name="payment_gateway"
                 className="border rounded focus:outline-none"
-                checked
+                defaultChecked
               />
               <label htmlFor="default" className="text-sm">Paymongo</label>
             </div>
@@ -112,7 +155,9 @@ export default () => {
                 type="radio"
                 name="shipping_method"
                 className="border rounded focus:outline-none"
-                checked
+                value="lalamove"
+                checked={methods.shipping.type==='lalamove'}
+                onChange={handleSelectShipping}
               />
               <label htmlFor="default" className="text-sm">Lalamove</label>
             </div>
@@ -122,6 +167,9 @@ export default () => {
                 type="radio"
                 name="shipping_method"
                 className="border rounded focus:outline-none"
+                value="ninjavan"
+                checked={methods.shipping.type==='ninjavan'}
+                onChange={handleSelectShipping}
               />
               <label htmlFor="default" className="text-sm">NinjaVan</label>
             </div>
@@ -131,15 +179,9 @@ export default () => {
                 type="radio"
                 name="shipping_method"
                 className="border rounded focus:outline-none"
-              />
-              <label htmlFor="default" className="text-sm">J&T</label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                id="default"
-                type="radio"
-                name="shipping_method"
-                className="border rounded focus:outline-none"
+                value="pickup"
+                checked={methods.shipping.type==='pickup'}
+                onChange={handleSelectShipping}
               />
               <label htmlFor="default" className="text-sm">Pick up at De La Salle University - Manila</label>
             </div>
@@ -162,9 +204,17 @@ export default () => {
                 </div>
               </>
             )}
+            {methods.shipping.charges > 0 && (
+              <>
+                <div className="flex justify-between mb-2 text-blue-600">
+                  <span>Shipping Charges</span>
+                  <span>{formatPeso(methods.shipping.charges)}</span>
+                </div>
+              </>
+            )}
             <div className="flex justify-between font-bold">
               <span>Total</span>
-              <span>{formatPeso(subtotal - couponDetails.couponAmount)}</span>
+              <span>{formatPeso(subtotal - couponDetails.couponAmount + methods.shipping.charges)}</span>
             </div>
             {cartItems.length > 0 && (
               <button

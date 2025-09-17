@@ -247,6 +247,22 @@ export async function deliveryAddresses(token = '') {
     return res.json();
 }
 
+export async function selectDeliveryAddress(token = '', data) {
+    const res = await fetch(api_address + `cart/delivery-computation`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw errorData;
+    }
+    return res.json();
+}
+
 export async function checkPromoCode(token = '', data) {
     const res = await fetch(api_address + `cart/apply-coupon`, {
         method: "POST",
